@@ -1,8 +1,17 @@
-import React from "react";
+import {ReactNode} from "react";
+import {NormalHeader} from "@/layout";
 
-const Container = () => {
+interface Props {
+  children: ReactNode;
+}
+
+const Container = ({children}: Props) => {
   return (
     <div>
+      <NormalHeader/>
+      {
+        children
+      }
     </div>
   );
 };
