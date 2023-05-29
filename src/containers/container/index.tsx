@@ -7,7 +7,7 @@ interface Props {
 
 const Container = ({children}: Props) => {
   return (
-    <div>
+    <div className={"container mx-auto max-w-7xl m-4"}>
       <NormalHeader/>
       {
         children
