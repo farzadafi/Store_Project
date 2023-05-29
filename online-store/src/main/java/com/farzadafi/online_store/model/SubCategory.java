@@ -1,7 +1,6 @@
 package com.farzadafi.online_store.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,4 +16,7 @@ public class SubCategory {
     private String id;
 
     private String name;
+
+    @ManyToOne
+    private Category category;
 }
