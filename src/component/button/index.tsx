@@ -1,6 +1,7 @@
 import {ReactNode} from "react";
 
 const variants: Record<string, string> = {
+  managerButton : "bg-[#569aff] rounded-md flex items-center p-1 text-white",
 };
 
 type buttonProps = {
