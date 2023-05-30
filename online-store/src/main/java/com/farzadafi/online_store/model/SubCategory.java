@@ -2,6 +2,7 @@ package com.farzadafi.online_store.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
@@ -17,6 +18,6 @@ public class SubCategory {
 
     private String name;
 
-    @ManyToOne
+    @DBRef
     private Category category;
 }
