@@ -6,6 +6,9 @@ import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,4 +22,10 @@ public class Category {
 
     @Indexed(unique = true)
     private String name;
+
+    private Set<SubCategory> subCategories = new HashSet<>();
+
+    public void addSubCategory(SubCategory subCategory) {
+        this.subCategories.add(subCategory);
+    }
 }
