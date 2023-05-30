@@ -22,4 +22,12 @@ public record SubCategoryService(SubCategoryRepository subCategoryRepository,
         categoryService.updateCategory(category);
         subCategoryRepository.save(subCategory).subscribe();
     }
+
+    public List<SubCategory> findAllByCategoryId(String categoryId) {
+        if (categoryService.findById(categoryId) != null) {
+            Flux<SubCategory> allByCategoryId = subCategoryRepository.findAllByCategoryId(categoryId);
+            return allByCategoryId.collectList().block();
+        }
+        return null;
+    }
 }
