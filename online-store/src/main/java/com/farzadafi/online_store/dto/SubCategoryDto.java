@@ -1,4 +1,4 @@
 package com.farzadafi.online_store.dto;
 
-public record SubCategoryDto(int id, String name) {
+public record SubCategoryDto(String id, String name) {
 }
