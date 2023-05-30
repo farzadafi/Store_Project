@@ -3,7 +3,6 @@ package com.farzadafi.online_store.model;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
@@ -29,7 +28,7 @@ public class Product {
 
     private Integer rate;
 
-    private Binary image;
+    private byte[] image;
 
     private String subCategoryId;
 }
