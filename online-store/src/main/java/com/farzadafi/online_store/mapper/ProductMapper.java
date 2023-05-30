@@ -9,7 +9,7 @@ import java.io.IOException;
 @Component
 public class ProductMapper {
 
-    public Product dtoToModel(ProductDto productDto) {
+    public static Product dtoToModel(ProductDto productDto) {
         Product product = new Product();
         product.setName(productDto.name());
         product.setPrice(productDto.price());
