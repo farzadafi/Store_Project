@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,4 +21,10 @@ public class SubCategory {
     private String name;
 
     private String categoryId;
+
+    private Set<Product> subCategories = new HashSet<>();
+
+    public void addProduct(Product product) {
+        this.subCategories.add(product);
+    }
 }
