@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sub-category")
 public record SubCategoryController(SubCategoryService subCategoryService) {
@@ -19,5 +21,11 @@ public record SubCategoryController(SubCategoryService subCategoryService) {
         SubCategory subCategory = SubCategoryMapper.INSTANCE.dtoToModel(subCategoryDto);
         subCategoryService.addSubCategory(categoryId, subCategory);
         return new ResponseEntity<>(new ReturnMessage("ok", 201), HttpStatus.CREATED);
+    }
+
+    @GetMapping("find-all-by-category-id")
+    public List<SubCategoryDto> findAllByCategoryId(@RequestParam String categoryId) {
+        List<SubCategory> allByCategoryId = subCategoryService.findAllByCategoryId(categoryId);
+        return SubCategoryMapper.INSTANCE.modelsToDtos(allByCategoryId);
     }
 }
