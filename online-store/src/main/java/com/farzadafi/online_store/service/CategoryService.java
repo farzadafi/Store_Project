@@ -19,6 +19,10 @@ public record CategoryService(CategoryRepository categoryRepository) {
         categoryRepository.save(category).subscribe();
     }
 
+    public void updateCategory(Category category) {
+        categoryRepository.save(category).subscribe();
+    }
+
     public Category findById(String id) {
         var categoryMono = categoryRepository.findById(id)
                 .switchIfEmpty(Mono.error(
