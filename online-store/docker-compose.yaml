@@ -5,17 +5,22 @@ services:
     container_name: mongodb
     ports:
       - "27017:27017"
+    networks:
+      - mongo
     volumes:
       - data:/data
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongo
       - MONGO_INITDB_ROOT_PASSWORD=mongo
+
   mongo-express:
     image: mongo-express
     container_name: mongo-express
     restart: always
     ports:
       - "8081:8081"
+    networks:
+      - mongo
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=mongo
       - ME_CONFIG_MONGODB_ADMINPASSWORD=mongo
@@ -24,5 +29,5 @@ volumes:
   data: {}
 
 networks:
-  defaults:
-    name : mongodb_farzad
+  mongo:
+    driver: bridge
