@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/category")
 public record CategoryController(CategoryService categoryService) {
@@ -18,5 +20,11 @@ public record CategoryController(CategoryService categoryService) {
         Category category = CategoryMapper.INSTANCE.dtoToModel(categoryDto);
         categoryService.addCategory(category);
         return new ResponseEntity<>(new ReturnMessage("ok", 201), HttpStatus.CREATED);
+    }
+
+    @GetMapping("find-by-id")
+    public CategoryDto findById(@RequestParam UUID id) {
+        Category category = categoryService.findById(id.toString());
+        return CategoryMapper.INSTANCE.modelToDto(category);
     }
 }
