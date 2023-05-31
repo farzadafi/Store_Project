@@ -1,6 +1,7 @@
 package com.farzadafi.online_store.controller;
 
 import com.farzadafi.online_store.dto.ProductDto;
+import com.farzadafi.online_store.dto.ProductDtoResponse;
 import com.farzadafi.online_store.dto.ReturnMessage;
 import com.farzadafi.online_store.mapper.ProductMapper;
 import com.farzadafi.online_store.model.Product;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -19,5 +22,12 @@ public record ProductController(ProductService productService) {
         Product product = ProductMapper.dtoToModel(productDto);
         productService.addProduct(product);
         return new ResponseEntity<>(new ReturnMessage("ok", 201), HttpStatus.CREATED);
+    }
+
+    @GetMapping("find-all-by-subcategory-id")
+    public List<ProductDtoResponse> findAllBySubCategoryId(@RequestParam String subCategoryId) {
+        List<Product> allBySubCategoryId = productService.findAllBySubCategoryId(subCategoryId);
+        assert allBySubCategoryId != null;
+        return ProductMapper.modelsToDtos(allBySubCategoryId);
     }
 }
