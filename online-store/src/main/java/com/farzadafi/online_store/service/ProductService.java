@@ -1,11 +1,13 @@
 package com.farzadafi.online_store.service;
 
 import com.farzadafi.online_store.exception.DuplicateException;
+import com.farzadafi.online_store.exception.NotFoundException;
 import com.farzadafi.online_store.model.Product;
 import com.farzadafi.online_store.model.SubCategory;
 import com.farzadafi.online_store.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +28,8 @@ public record ProductService(SubCategoryService subCategoryService,
 
     public List<Product> findAllBySubCategoryId(String subCategoryId) {
         if (subCategoryService.findById(subCategoryId) != null) {
-            Flux<Product> allBySubCategoryId = productRepository.findAllBySubCategoryId(subCategoryId);
+            Flux<Product> allBySubCategoryId = productRepository.findAllBySubCategoryId(subCategoryId)
+                    .switchIfEmpty(Mono.error(new NotFoundException("No products found")));
             return allBySubCategoryId.collectList().block();
         }
         return null;
