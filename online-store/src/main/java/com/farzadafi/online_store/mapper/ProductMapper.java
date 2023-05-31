@@ -1,10 +1,13 @@
 package com.farzadafi.online_store.mapper;
 
 import com.farzadafi.online_store.dto.ProductDto;
+import com.farzadafi.online_store.dto.ProductDtoResponse;
 import com.farzadafi.online_store.model.Product;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ProductMapper {
@@ -24,5 +27,26 @@ public class ProductMapper {
             e.printStackTrace();
         }
         return product;
+    }
+
+    public static ProductDtoResponse modelToDto(Product product) {
+        return new ProductDtoResponse(product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getQuantity(),
+                product.getBrand(),
+                product.getDescription(),
+                product.getRate(),
+                product.getImage(),
+                product.getSubCategoryId());
+    }
+
+    public static List<ProductDtoResponse> modelsToDtos(List<Product> productList) {
+        List<ProductDtoResponse> productDtoList = new ArrayList<>();
+        for (Product e : productList
+        ) {
+            productDtoList.add(modelToDto(e));
+        }
+        return productDtoList;
     }
 }
