@@ -7,7 +7,7 @@ public record ProductDtoResponse(String id,
                                  String brand,
                                  String description,
                                  Integer rate,
-                                 byte[] image,
+                                 String image,
                                  String subCategoryId) {
 }
 
