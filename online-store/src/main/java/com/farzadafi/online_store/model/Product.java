@@ -28,7 +28,7 @@ public class Product {
 
     private Integer rate;
 
-    private byte[] image;
+    private String image;
 
     private String subCategoryId;
 }
