@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Component
@@ -22,7 +23,9 @@ public class ProductMapper {
         product.setRate(productDto.rate());
         product.setSubCategoryId(productDto.subCategoryId());
         try {
-            product.setImage(productDto.image().getBytes());
+            byte[] bytes = productDto.image().getBytes();
+            String base64Encoded = Base64.getEncoder().encodeToString(bytes);
+            product.setImage(base64Encoded);
         } catch (IOException e) {
             e.printStackTrace();
         }
