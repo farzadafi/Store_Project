@@ -10,9 +10,12 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongo
       - MONGO_INITDB_ROOT_PASSWORD=mongo
+      - MONGO_INITDB_DATA_FILE=/home/farzad/data.json
     volumes:
-      - data:/data
-      - ./farzad.txt:/home/farzad/farzad.txt
+      - ./data:/data/db
+      - ./data.json:/home/farzad/data.json
+      - ./bash/docker-entrypoint.sh:/home/farzad/docker-entrypoint.sh
+#    command: bash -c "bash /home/farzad/docker-entrypoint.sh && tail -f /dev/null"
   mongo-express:
     image: mongo-express
     container_name: mongo-express
