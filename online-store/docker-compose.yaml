@@ -7,12 +7,12 @@ services:
       - "27017:27017"
     networks:
       - mongo
-    volumes:
-      - data:/data
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongo
       - MONGO_INITDB_ROOT_PASSWORD=mongo
-
+    volumes:
+      - data:/data
+      - ./farzad.txt:/home/farzad/farzad.txt
   mongo-express:
     image: mongo-express
     container_name: mongo-express
