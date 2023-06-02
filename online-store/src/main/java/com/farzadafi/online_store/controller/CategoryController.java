@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,5 +27,11 @@ public record CategoryController(CategoryService categoryService) {
     public CategoryDto findById(@RequestParam UUID id) {
         Category category = categoryService.findById(id.toString());
         return CategoryMapper.INSTANCE.modelToDto(category);
+    }
+
+    @GetMapping("find-all")
+    public List<CategoryDto> findAll() {
+        List<Category> categoryList = categoryService.findAllCategory();
+        return CategoryMapper.INSTANCE.modelsToDtos(categoryList);
     }
 }
