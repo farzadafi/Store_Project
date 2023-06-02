@@ -22,8 +22,6 @@ public class Product {
 
     private Integer quantity;
 
-    private String brand;
-
     private String description;
 
     private Integer rate;
