@@ -55,11 +55,11 @@ const LoginPage = () => {
                 <h1 className={"text-3xl text-center whitespace-nowrap"}>فرم ورود به سامانه</h1>
                 <div>
                   <FormikInput icon={userIcon} type={"text"} name={"username"} placeHolder={"نام کاربری"}/>
-                  <ErrorMessage name="username" component="div"/>
+                  <ErrorMessage name="username" component="div" className={"text-red-500 text-xs"}/>
                 </div>
                 <div>
                   <FormikInput icon={passwordIcon} type={"password"} name={"password"} placeHolder={"رمز عبور"}/>
-                  <ErrorMessage name="password" component="div"/>
+                  <ErrorMessage name="password" component="div" className={"text-red-500 text-xs"}/>
                 </div>
                 <a className={"text-xs -mt-5"} href="#">رمز خود را فراموش کرده اید؟</a>
                 <button type="submit" disabled={isSubmitting}>
