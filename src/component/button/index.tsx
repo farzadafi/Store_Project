@@ -11,12 +11,13 @@ type buttonProps = {
   variant: string,
   classes?: string,
   onClick?: () => void;
-  children?: ReactNode
+  children?: ReactNode,
+  type?: "button" | "submit" | "reset"
 }
 
-const Button = ({variant, classes, onClick, children}: buttonProps) => {
+const Button = ({variant, classes, onClick, children, type}: buttonProps) => {
   return (
-    <button className={`${variants[variant]} ${classes}`} onClick={() => {
+    <button type={type} className={`${variants[variant]} ${classes}`} onClick={() => {
       onClick && onClick();
     }
     }>
