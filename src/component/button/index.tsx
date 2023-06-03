@@ -1,7 +1,10 @@
 import {ReactNode} from "react";
 
+const commonClasses = "rounded-md flex items-center p-3 text-white";
+
 const variants: Record<string, string> = {
-  managerButton : "bg-[#569aff] rounded-md flex items-center p-3 text-white",
+  managerButton: `${commonClasses} bg-[#569aff]`,
+  login: `${commonClasses} bg-gradiant w-full justify-center h-8`
 };
 
 type buttonProps = {
