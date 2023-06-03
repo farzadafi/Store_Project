@@ -2,6 +2,7 @@ import {Button, FormikInput} from "@/component";
 import {FaUser} from "react-icons/fa";
 import {RiLockPasswordFill} from "react-icons/ri";
 import {ErrorMessage, Form, Formik} from "formik";
+import {useRef} from "react";
 
 const userIcon = <FaUser/>;
 const passwordIcon = <RiLockPasswordFill/>;
@@ -21,7 +22,15 @@ const initialValues: MyFormValues = {
   password: ""
 };
 
+
 const LoginPage = () => {
+  const forgotPasswordTextRef = useRef<HTMLAnchorElement | null>(null);
+
+  function handleForgotPasswordClick() {
+    if (forgotPasswordTextRef.current !== null) {
+      forgotPasswordTextRef.current.innerText = "بزن تو سر خودت :)";
+    }  }
+
   return (
     <div className={"h-screen bg-gradiant"}>
       <div
@@ -61,7 +70,8 @@ const LoginPage = () => {
                   <FormikInput icon={passwordIcon} type={"password"} name={"password"} placeHolder={"رمز عبور"}/>
                   <ErrorMessage name="password" component="div" className={"text-red-500 text-xs"}/>
                 </div>
-                <a className={"text-xs -mt-5"} href="#">رمز خود را فراموش کرده اید؟</a>
+                <a ref={forgotPasswordTextRef} onClick={handleForgotPasswordClick} className={"text-xs -mt-5"} href="#">رمز
+                  خود را فراموش کرده اید؟</a>
                 <Button type={"submit"} variant={"login"}>ورود</Button>
               </div>
             </Form>
