@@ -1,4 +1,4 @@
-import {FormikInput} from "@/component";
+import {Button, FormikInput} from "@/component";
 import {FaUser} from "react-icons/fa";
 import {RiLockPasswordFill} from "react-icons/ri";
 import {ErrorMessage, Form, Formik} from "formik";
@@ -49,7 +49,7 @@ const LoginPage = () => {
                   }, 400);
                 }}>
 
-          {({isSubmitting}) => (
+          {() => (
             <Form>
               <div className={"flex flex-col gap-6"}>
                 <h1 className={"text-3xl text-center whitespace-nowrap"}>فرم ورود به سامانه</h1>
@@ -62,9 +62,7 @@ const LoginPage = () => {
                   <ErrorMessage name="password" component="div" className={"text-red-500 text-xs"}/>
                 </div>
                 <a className={"text-xs -mt-5"} href="#">رمز خود را فراموش کرده اید؟</a>
-                <button type="submit" disabled={isSubmitting}>
-                  Submit
-                </button>
+                <Button type={"submit"} variant={"login"}>ورود</Button>
               </div>
             </Form>
           )}
