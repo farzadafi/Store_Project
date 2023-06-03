@@ -16,7 +16,7 @@ const FormikInput = ({type, name, placeHolder, icon}: Props) => {
           icon
         }
       </div>
-      <Field type={type} name={name} placeHolder={placeHolder}
+      <Field type={type} name={name} placeholder={placeHolder}
              className={"focus:outline-pink-600 pr-8 outline-none block bg-transparent h-10 w-full sm:text-sm border border-gray-300 rounded-md"}/>
     </div>
   );
