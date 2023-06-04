@@ -4,5 +4,6 @@ public record CustomerDto(String id,
                           String firstname,
                           String lastname,
                           String username,
-                          String password) {
+                          String password,
+                          Long balance) {
 }
