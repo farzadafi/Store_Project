@@ -1,10 +1,9 @@
 package com.farzadafi.online_store.model;
 
 import com.farzadafi.online_store.model.enumoration.Role;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
@@ -12,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Builder
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Document
 public class User {
     @Id
@@ -22,6 +22,7 @@ public class User {
 
     private String lastname;
 
+    @Indexed(unique = true)
     private String username;
 
     private String password;
