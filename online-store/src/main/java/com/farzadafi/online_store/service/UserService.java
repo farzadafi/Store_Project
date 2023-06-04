@@ -6,6 +6,8 @@ import com.farzadafi.online_store.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 @Service
 public record UserService(UserRepository userRepository) {
 
@@ -14,5 +16,9 @@ public record UserService(UserRepository userRepository) {
                 .switchIfEmpty(Mono.error(
                         new NotFoundException(String.format("یوزری با این نام کاربری پیدا نشد %s", username))));
         return userMono.block();
+    }
+
+    public Optional<User> findByUsernameOptional(String username) {
+        return userRepository.findByUsername(username).blockOptional();
     }
 }
