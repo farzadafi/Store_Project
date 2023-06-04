@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-@Document
+@Document("users")
 public class Admin extends User {
 }
