@@ -17,7 +17,7 @@ public record CustomerService(CustomerRepository customerRepository,
         if (customerRepository.findByUsername(customer.getUsername()).block() != null)
             throw new DuplicateException(String.format("این نام کاربری قبلا استفاده شده است, %s", customer.getUsername()));
         customer.setId(UUID.randomUUID().toString());
-        customer.setRole(Role.CUSTOMER);
+        customer.setRole(Role.ROLE_CUSTOMER);
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customerRepository.save(customer).subscribe();
     }
