@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Document
 public class User {
