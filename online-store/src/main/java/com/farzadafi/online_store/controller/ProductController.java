@@ -9,14 +9,22 @@ import com.farzadafi.online_store.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/product")
-public record ProductController(ProductService productService) {
+public class ProductController {
 
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ReturnMessage> save(@ModelAttribute("productDto") @RequestBody ProductDto productDto) {
         Product product = ProductMapper.dtoToModel(productDto);
