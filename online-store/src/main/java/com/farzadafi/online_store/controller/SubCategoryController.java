@@ -7,16 +7,24 @@ import com.farzadafi.online_store.model.SubCategory;
 import com.farzadafi.online_store.service.SubCategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/sub-category")
-public record SubCategoryController(SubCategoryService subCategoryService) {
+public class SubCategoryController {
 
+    private final SubCategoryService subCategoryService;
+
+    public SubCategoryController(SubCategoryService subCategoryService) {
+        this.subCategoryService = subCategoryService;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<ReturnMessage> addCategory(@RequestBody SubCategoryDto subCategoryDto,
+    public ResponseEntity<ReturnMessage> addSubCategory(@RequestBody SubCategoryDto subCategoryDto,
                                                      @RequestParam String categoryId) {
         SubCategory subCategory = SubCategoryMapper.INSTANCE.dtoToModel(subCategoryDto);
         subCategoryService.addSubCategory(categoryId, subCategory);
