@@ -3,7 +3,10 @@ import {FaUser} from "react-icons/fa";
 import {RiLockPasswordFill} from "react-icons/ri";
 import {ErrorMessage, Form, Formik} from "formik";
 import {useRef} from "react";
-import {LoginErrors, LoginFormValue} from "@/interfaces";
+import {LoginErrors, LoginFormValue, ResultMessage} from "@/interfaces";
+import {useCookies} from "react-cookie";
+import ApiClient from "@/services/api-client";
+import {toast} from "react-toastify";
 
 const userIcon = <FaUser/>;
 const passwordIcon = <RiLockPasswordFill/>;
@@ -15,11 +18,20 @@ const initialValues: LoginFormValue = {
 
 const LoginPage = () => {
   const forgotPasswordTextRef = useRef<HTMLAnchorElement | null>(null);
+  const [_cookies, setCookie] = useCookies(["token"]);
 
   function handleForgotPasswordClick() {
     if (forgotPasswordTextRef.current !== null) {
       forgotPasswordTextRef.current.innerText = "بزن تو سر خودت :)";
-    }  }
+    }
+  }
+
+  const showToastMessage = () => {
+    toast.success("خان اول رو تونستی رد کنی بدبخت", {
+      position: toast.POSITION.TOP_RIGHT,
+      className: "toast-message"
+    });
+  };
 
   return (
     <div className={"h-screen bg-gradiant"}>
@@ -43,7 +55,15 @@ const LoginPage = () => {
 
                 onSubmit={(values, {setSubmitting}) => {
                   setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
+                    const instance = new ApiClient("/api/login/getToken");
+                    const resultCall = instance.loginPost(values) as Promise<ResultMessage>;
+                    resultCall.then((result: ResultMessage) => {
+                      setCookie("token", result.message);
+                      showToastMessage();
+                    }).catch((error: ResultMessage) => {
+                      console.log(error.message);
+                      console.log(error.code);
+                    });
                     setSubmitting(false);
                   }, 400);
                 }}>
