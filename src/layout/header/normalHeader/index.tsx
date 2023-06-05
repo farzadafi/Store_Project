@@ -1,6 +1,7 @@
 import {Button} from "@/component";
 import {SlBasket} from "react-icons/sl";
 import {FcMultipleSmartphones} from "react-icons/fc";
+import {Link} from "react-router-dom";
 
 const NormalHeader = () => {
   return (
@@ -10,7 +11,9 @@ const NormalHeader = () => {
         <p className={"text-xs text-white"}>موبایل ناصر</p>
       </div>
       <div className={"flex gap-4 text-xs"}>
-        <Button variant={"managerButton"}>مدیریت</Button>
+        <Link to="/login">
+          <Button variant={"managerButton"}>مدیریت</Button>
+        </Link>
         <Button variant={"managerButton"}>
           <div className={"flex gap-2 items-center"}>
             <SlBasket/>
