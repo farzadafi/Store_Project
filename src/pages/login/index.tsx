@@ -7,6 +7,7 @@ import {LoginErrors, LoginFormValue, ResultMessage} from "@/interfaces";
 import {useCookies} from "react-cookie";
 import ApiClient from "@/services/api-client";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router";
 
 const userIcon = <FaUser/>;
 const passwordIcon = <RiLockPasswordFill/>;
@@ -19,6 +20,7 @@ const initialValues: LoginFormValue = {
 const LoginPage = () => {
   const forgotPasswordTextRef = useRef<HTMLAnchorElement | null>(null);
   const [_cookies, setCookie] = useCookies(["token"]);
+  const navigate = useNavigate();
 
   function handleForgotPasswordClick() {
     if (forgotPasswordTextRef.current !== null) {
@@ -52,11 +54,11 @@ const LoginPage = () => {
             errors.username = "نام کاربری سالم نیست :)";
 
           if (!values.password)
-            errors.password = "چیز خوبی نمیزنی!";
+            errors.password = "جنس مرغوب بزن";
           else if (
             /^.{0,3}$/.test(values.password)
           )
-            errors.password = "چیز خوبی نمیزنی!";
+            errors.password = "جنس مرغوب بزن";
           return errors;
         }}
 
@@ -67,6 +69,7 @@ const LoginPage = () => {
                     resultCall.then((result: ResultMessage) => {
                       setCookie("token", result.message);
                       showSuccessfulToastMessage();
+                      navigate("/main-manager-page");
                     }).catch((_error: ResultMessage) => {
                         showErrorToastMessage()
                     });
