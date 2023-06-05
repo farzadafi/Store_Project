@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 // I have to remove and refactor this :) todo
+//@CrossOrigin(methods = RequestMethod.POST, allowCredentials = "true", allowedHeaders = "*", originPatterns = "*", origins = "allowedOriginPatterns")
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
@@ -23,6 +24,7 @@ public class LoginController {
         this.objectMapper = objectMapper;
     }
 
+    @CrossOrigin(methods = RequestMethod.POST, allowCredentials = "true", allowedHeaders = "*", originPatterns = "*", origins = "allowedOriginPatterns")
     @PostMapping("/getToken")
     public ResponseEntity<ReturnMessage> getToken(@RequestBody UsernameAndPasswordAuthenticationRequest user) {
         HashMap<String, Object> map = new HashMap<>();
