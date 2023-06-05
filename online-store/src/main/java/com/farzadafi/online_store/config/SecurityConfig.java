@@ -45,7 +45,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/**"))
                 .sessionManagement(authority -> authority.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilter(new JwtUsernameAndPasswordAuthenticationFilter
                         (authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
