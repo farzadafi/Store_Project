@@ -3,25 +3,15 @@ import {FaUser} from "react-icons/fa";
 import {RiLockPasswordFill} from "react-icons/ri";
 import {ErrorMessage, Form, Formik} from "formik";
 import {useRef} from "react";
+import {LoginErrors, LoginFormValue} from "@/interfaces";
 
 const userIcon = <FaUser/>;
 const passwordIcon = <RiLockPasswordFill/>;
 
-interface MyFormValues {
-  username: string,
-  password: string
-}
-
-interface error {
-  username?: string;
-  password?: string;
-}
-
-const initialValues: MyFormValues = {
+const initialValues: LoginFormValue = {
   username: "",
   password: ""
 };
-
 
 const LoginPage = () => {
   const forgotPasswordTextRef = useRef<HTMLAnchorElement | null>(null);
@@ -36,7 +26,7 @@ const LoginPage = () => {
       <div
         className="bg-gray-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-10 rounded-md">
         <Formik initialValues={initialValues} validate={values => {
-          const errors: error = {};
+          const errors: LoginErrors = {};
           if (!values.username)
             errors.username = "چی میزنی؟";
           else if (/^.{0,3}$/.test(values.username))
