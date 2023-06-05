@@ -26,8 +26,15 @@ const LoginPage = () => {
     }
   }
 
-  const showToastMessage = () => {
+  const showSuccessfulToastMessage = () => {
     toast.success("خان اول رو تونستی رد کنی بدبخت", {
+      position: toast.POSITION.TOP_RIGHT,
+      className: "toast-message"
+    });
+  };
+
+  const showErrorToastMessage = () => {
+    toast.error("مریضی درخواست الکی میزنی سمت سرور؟", {
       position: toast.POSITION.TOP_RIGHT,
       className: "toast-message"
     });
@@ -59,10 +66,9 @@ const LoginPage = () => {
                     const resultCall = instance.loginPost(values) as Promise<ResultMessage>;
                     resultCall.then((result: ResultMessage) => {
                       setCookie("token", result.message);
-                      showToastMessage();
-                    }).catch((error: ResultMessage) => {
-                      console.log(error.message);
-                      console.log(error.code);
+                      showSuccessfulToastMessage();
+                    }).catch((_error: ResultMessage) => {
+                        showErrorToastMessage()
                     });
                     setSubmitting(false);
                   }, 400);
