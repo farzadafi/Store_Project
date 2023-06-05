@@ -1,5 +1,4 @@
 import {ReactNode} from "react";
-import {NormalHeader} from "@/layout";
 
 interface Props {
   children: ReactNode;
@@ -7,8 +6,7 @@ interface Props {
 
 const Container = ({children}: Props) => {
   return (
-    <div className={"container mx-auto max-w-7xl m-4"}>
-      <NormalHeader/>
+    <div className={"container mx-auto max-w-5xl mt-4 flex flex-col h-screen"}>
       {
         children
       }
