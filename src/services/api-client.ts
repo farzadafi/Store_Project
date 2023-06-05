@@ -1,4 +1,5 @@
 import axios from "axios";
+import {LoginFormValue} from "@/interfaces";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080"
@@ -10,11 +11,12 @@ class APIClient<T> {
     this.endPoint = endPoint
   }
 
-  get = () => {
+  loginPost = (data:LoginFormValue) => {
     return axiosInstance
-      .get<T>(this.endPoint)
-      .then((result) => result.data)
+      .post<T>(this.endPoint, data)
+      .then(result => result.data)
   }
 }
+
 
 export default APIClient;
