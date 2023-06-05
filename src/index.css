@@ -12,3 +12,9 @@ body {
     direction: rtl;
     font-family: Vazir, serif;
 }
+
+.toast-message {
+    direction: rtl;
+    font-family: Vazir, serif;
+    width: max-content;
+}
