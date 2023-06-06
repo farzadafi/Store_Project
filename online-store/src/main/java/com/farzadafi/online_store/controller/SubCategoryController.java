@@ -36,4 +36,9 @@ public class SubCategoryController {
         List<SubCategory> allByCategoryId = subCategoryService.findAllByCategoryId(categoryId);
         return SubCategoryMapper.INSTANCE.modelsToDtos(allByCategoryId);
     }
+
+    @GetMapping("find-all")
+    public List<SubCategory> findAllCategory() {
+        return subCategoryService.findAllSubCategory();
+    }
 }
