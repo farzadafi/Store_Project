@@ -38,4 +38,11 @@ public class ProductController {
         assert allBySubCategoryId != null;
         return ProductMapper.modelsToDtos(allBySubCategoryId);
     }
+
+    @GetMapping("find-all-product")
+    public List<ProductDtoResponse> findAllProduct() {
+        List<Product> allBySubCategoryId = productService.findAllProduct();
+        assert allBySubCategoryId != null;
+        return ProductMapper.modelsToDtos(allBySubCategoryId);
+    }
 }
