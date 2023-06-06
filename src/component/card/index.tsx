@@ -11,16 +11,16 @@ interface Props {
 
 const Card = ({image, name, price, subCategory}:Props) => {
   return (
-    <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      <li className="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+    <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-1">
+      <li className="col-span-1 flex flex-col text-center bg-white rounded-md shadow divide-y divide-gray-200">
         <div className="flex-1 flex flex-col p-8">
-          <img className="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src={"data:image/png;base64," + image} alt="imageUrl"/>
-          <h3 className="mt-6 text-gray-900 text-sm font-medium">{name}</h3>
+          <img className="w-6 h-6 flex-shrink-0 mx-auto" src={"data:image/png;base64," + image} alt="imageUrl"/>
+          <h3 className="mt-2 text-gray-900 text-sm font-medium">{name}</h3>
           <dl className="mt-1 flex-grow flex flex-col justify-between">
             <dt className="sr-only">Name</dt>
             <dd className="text-gray-500 text-sm">{subCategory}</dd>
             <dt className="sr-only">Price</dt>
-            <dd className="mt-3">
+            <dd className="mt-2">
                 <span className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
                   {price}
                 </span>
@@ -28,19 +28,19 @@ const Card = ({image, name, price, subCategory}:Props) => {
           </dl>
         </div>
         <div>
-          <div className="-mt-px flex divide-x divide-gray-200">
-            <div className="w-0 flex-1 flex">
+          <div className="flex divide-gray-200 gap-1 p-1">
+            <div className="flex-1 flex ">
               <Button
                 variant={"remove"}>
                 <RiDeleteBin6Line/>
-                <span className="ml-3">حذف</span>
+                <span className="">حذف</span>
               </Button>
             </div>
-            <div className="-ml-px w-0 flex-1 flex">
-              <Button 
-                 classes="" variant={"edit"}>
+            <div className="flex-1 flex">
+              <Button
+                 classes={""} variant={"edit"}>
                 <BsPencilSquare/>
-                <span className="ml-3">ویرایش</span>
+                <span className="">ویرایش</span>
               </Button>
             </div>
           </div>
