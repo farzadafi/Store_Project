@@ -3,6 +3,7 @@ package com.farzadafi.online_store.service;
 import com.farzadafi.online_store.exception.DuplicateException;
 import com.farzadafi.online_store.exception.NotFoundException;
 import com.farzadafi.online_store.model.Category;
+import com.farzadafi.online_store.model.Product;
 import com.farzadafi.online_store.model.SubCategory;
 import com.farzadafi.online_store.repository.SubCategoryRepository;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,11 @@ public record SubCategoryService(SubCategoryRepository subCategoryRepository,
                 .switchIfEmpty(Mono.error(
                         new NotFoundException(String.format("دسته بندی با این آیدی پیدا نشد %s", id))));
         return categoryMono.block();
+    }
+
+    public List<SubCategory> findAllSubCategory() {
+        Flux<SubCategory> allSubCategory = subCategoryRepository.findAll()
+                .switchIfEmpty(Mono.error(new NotFoundException("No subCategory found")));
+        return allSubCategory.collectList().block();
     }
 }
