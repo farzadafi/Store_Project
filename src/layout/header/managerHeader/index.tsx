@@ -8,8 +8,8 @@ const ManagerHeader = () => {
       </div>
       <div className={"flex gap-4 text-xs max-[550px]:flex-col"}>
         <div className={"flex gap-2"}>
-          <Button classes={""} variant={"managerButton"}>کالا ها</Button>
-          <Button variant={"managerButton"}>موجودی و قیمت ها</Button>
+          <Button classes={"max-sm:whitespace-nowrap"} variant={"managerButton"}>کالا ها</Button>
+          <Button classes={"max-sm:whitespace-nowrap"} variant={"managerButton"}>موجودی و قیمت ها</Button>
         </div>
         <div className={"flex gap-2"}>
           <Button variant={"managerButton"}>سفارش ها</Button>
