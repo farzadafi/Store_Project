@@ -1,8 +1,11 @@
+import {ManagerHeader} from "@/layout";
+import {Container} from "@/containers";
+
 const MainManagerPage = () => {
   return (
-    <div>
-      main manager is here :)
-    </div>
+    <Container>
+      <ManagerHeader/>
+    </Container>
   );
 };
 
