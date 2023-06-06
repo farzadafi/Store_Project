@@ -34,4 +34,10 @@ public record ProductService(SubCategoryService subCategoryService,
         }
         return null;
     }
+
+    public List<Product> findAllProduct() {
+        Flux<Product> allProduct = productRepository.findAll()
+                .switchIfEmpty(Mono.error(new NotFoundException("No product found")));
+        return allProduct.collectList().block();
+    }
 }
