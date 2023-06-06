@@ -16,6 +16,12 @@ class APIClient<T> {
       .post<T>(this.endPoint, data)
       .then(result => result.data)
   }
+
+  getAllProduct = () => {
+    return axiosInstance
+      .get<T>(this.endPoint)
+      .then(result => result.data)
+  }
 }
 
 
