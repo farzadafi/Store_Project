@@ -1,6 +1,11 @@
 import {Button} from "@/component";
+import {useLocation} from "react-router";
 
 const ManagerHeader = () => {
+  const location = useLocation();
+
+  const currentRoute = location.pathname;
+
   return (
     <div className={"flex justify-between bg-[#8130d1] p-2 max-sm:gap-4"}>
       <div className={"flex items-center"}>
@@ -8,7 +13,7 @@ const ManagerHeader = () => {
       </div>
       <div className={"flex gap-4 text-xs max-[550px]:flex-col"}>
         <div className={"flex gap-2"}>
-          <Button classes={"max-sm:whitespace-nowrap"} variant={"managerButton"}>کالا ها</Button>
+          <Button classes={`max-sm:whitespace-nowrap ${currentRoute === "main-manager-page" ? "" : "bg-green-500"}`} variant={"managerButton"}>کالا ها</Button>
           <Button classes={"max-sm:whitespace-nowrap"} variant={"managerButton"}>موجودی و قیمت ها</Button>
         </div>
         <div className={"flex gap-2"}>
