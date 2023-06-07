@@ -61,7 +61,7 @@ const ManagerProducts = () => {
       </div>
 
       <div className={"max-w-4xl mt-10"}>
-        <div className="relative overflow-y-auto h-80 overflow-hidden rounded-xl border">
+        <div className="relative overflow-y-auto h-[40rem] max-sm:h-[30rem] overflow-hidden rounded-xl border">
           <table className="w-full text-sm text-left text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
             <tr>
@@ -75,7 +75,7 @@ const ManagerProducts = () => {
             <tbody className={""}>
             {fetchData.map((subCategory) => (
               subCategory.subCategories.map((product, index) => (
-                  <tr className={"border-b dark:bg-gray-800 dark:border-gray-700"} key={index}>
+                  <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center"} key={index}>
                     <td className=" whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">
                       <img className="w-12 h-12 flex-shrink-0 mx-auto" src={"data:image/png;base64," + product.image}
                            alt="imageUrl"/>
@@ -90,8 +90,6 @@ const ManagerProducts = () => {
           </table>
         </div>
       </div>
-
-
     </div>
   );
 };
