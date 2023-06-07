@@ -61,12 +61,12 @@ const ManagerProducts = () => {
       </div>
 
       <div className={"max-w-4xl mt-10"}>
-        <div className="relative overflow-y-auto h-[40rem] max-sm:h-[30rem] overflow-hidden rounded-xl border">
-          <table className="w-full text-sm text-left text-white dark:text-gray-400 table-fixed">
+        <div className="relative overflow-y-auto  h-[40rem] max-sm:h-[30rem] overflow-hidden rounded-xl border">
+          <table className="w-full max-sm:w-screen text-sm text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
-            <tr>
+            <tr className={"max-sm:"}>
               {tableHeaderArray.map((str, index) => (
-                <th scope="col" className="py-3 text-center" key={index}>
+                <th scope="col" className="py-3 sm:text-center max-sm:text-right max-sm:p-3" key={index}>
                   {str}
                 </th>
               ))}
@@ -75,14 +75,17 @@ const ManagerProducts = () => {
             <tbody className={""}>
             {fetchData.map((subCategory) => (
               subCategory.subCategories.map((product, index) => (
-                  <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center"} key={index}>
-                    <td className=" whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">
-                      <img className="w-12 h-12 flex-shrink-0 mx-auto" src={"data:image/png;base64," + product.image}
+                  <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center max-sm:text-right"} key={index}>
+                    <td className="whitespace-nowrap pl-4 pr-3 text-sm max-sm:pl-12 font-medium text-white sm:pl-2 max-sm:text-right">
+                      <img className="w-12 h-12 max-sm:w-8 max-sm:h-8 flex-shrink-0 mx-auto" src={"data:image/png;base64," + product.image}
                            alt="imageUrl"/>
                     </td>
-                    <td className="">{product.name}</td>
-                    <td className="">{subCategory.name}</td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm">{"farzad"}</td>
+                    <td className="whitespace-nowrap max-sm:pl-24">{product.name}</td>
+                    <td className="max-sm:pr-2">{subCategory.name}</td>
+                    <td className="whitespace-nowrap py-4 text-sm flex">
+                      <Button classes={"max-sm:p-0"} variant={"edit"}>ویرایش</Button>
+                      <Button classes={"max-sm:p-0"} variant={"remove"}>حذف</Button>
+                    </td>
                   </tr>
                 )
               )))}
