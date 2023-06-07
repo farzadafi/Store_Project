@@ -1,12 +1,21 @@
 import {ManagerHeader} from "@/layout";
 import {Container} from "@/containers";
-import ManagerProducts from "@/pages/manager/products/ManagerProducts";
+import {useEffect} from "react";
+import {Outlet, useNavigate} from "react-router";
 
 const MainManagerPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/main-manager-page/products')
+  }, []);
+
   return (
     <Container>
       <ManagerHeader/>
-      <ManagerProducts/>
+      <div>
+        <Outlet/>
+      </div>
     </Container>
   );
 };
