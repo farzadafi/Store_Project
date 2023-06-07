@@ -2,6 +2,8 @@ import {Button} from "@/component";
 import ApiClient from "@/services/api-client";
 import {SubCategory} from "@/interfaces";
 import {useEffect, useState} from "react";
+import {BsPencilSquare} from "react-icons/bs";
+import {RiDeleteBin6Line} from "react-icons/ri";
 
 const ManagerProducts = () => {
   const [fetchData, setFetchData] = useState<SubCategory[]>([]);
@@ -83,8 +85,12 @@ const ManagerProducts = () => {
                     <td className="whitespace-nowrap max-sm:pl-24">{product.name}</td>
                     <td className="max-sm:pr-2">{subCategory.name}</td>
                     <td className="whitespace-nowrap py-4 text-sm flex">
-                      <Button classes={"max-sm:p-0"} variant={"edit"}>ویرایش</Button>
-                      <Button classes={"max-sm:p-0"} variant={"remove"}>حذف</Button>
+                      <Button classes={"max-sm:p-0"} variant={"edit"}>ویرایش
+                        <BsPencilSquare/>
+                      </Button>
+                      <Button classes={"max-sm:p-0"} variant={"remove"}>حذف
+                        <RiDeleteBin6Line/>
+                      </Button>
                     </td>
                   </tr>
                 )
