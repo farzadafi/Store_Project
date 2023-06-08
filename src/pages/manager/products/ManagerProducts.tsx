@@ -1,18 +1,26 @@
-import {Button} from "@/component";
+import {Button, Input} from "@/component";
 import ApiClient from "@/services/api-client";
 import {SubCategory} from "@/interfaces";
 import React, {useEffect, useRef, useState} from "react";
 import {BsPencilSquare} from "react-icons/bs";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import {IoIosArrowDown} from "react-icons/io";
+import {BiSearchAlt} from "react-icons/bi";
 
 const ManagerProducts = () => {
+  const searchIcon = <BiSearchAlt className={"text-gray-500 w-4 h-4"}/>
   const [fetchData, setFetchData] = useState<SubCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [sourceOfTruth, setSourceOfTruth] = useState<SubCategory[]>([]);
+  const [inputValue, setInputValue] = useState<string>("");
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    console.log(inputValue);
+  };
 
   function handleClickOutside(event: MouseEvent) {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -82,7 +90,7 @@ const ManagerProducts = () => {
           };
         });
         setFetchData(formattedResult);
-        setSourceOfTruth(formattedResult)
+        setSourceOfTruth(formattedResult);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -113,7 +121,7 @@ const ManagerProducts = () => {
             <tr>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>تصویر</th>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
-
+                <Input placeHolder={"نام محصول"} icon={searchIcon} type={"text"} name={"search"} onChange={handleInputChange} classes={"bg-white text-black h-8 max-w"}/>
               </th>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
                 <div className={"relative"} ref={handleDropdownRef}>
