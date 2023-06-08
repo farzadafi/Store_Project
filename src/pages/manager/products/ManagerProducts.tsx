@@ -1,7 +1,7 @@
 import {Button} from "@/component";
 import ApiClient from "@/services/api-client";
 import {SubCategory} from "@/interfaces";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {BsPencilSquare} from "react-icons/bs";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import {IoIosArrowDown} from "react-icons/io";
@@ -9,6 +9,37 @@ import {IoIosArrowDown} from "react-icons/io";
 const ManagerProducts = () => {
   const [fetchData, setFetchData] = useState<SubCategory[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  function handleClickOutside(event: MouseEvent) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  }
+
+  function toggleDropdown() {
+    setIsOpen(!isOpen);
+  }
+
+  const addClickEventListener = () => {
+    document.addEventListener("mousedown", handleClickOutside);
+  };
+
+  const removeClickEventListener = () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+
+  const handleDropdownRef = (node: HTMLDivElement | null) => {
+    dropdownRef.current = node;
+    if (node) {
+      addClickEventListener();
+    } else {
+      removeClickEventListener();
+    }
+  };
+
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -79,32 +110,32 @@ const ManagerProducts = () => {
 
               </th>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
-                <div className={"relative"}>
+                <div className={"relative"} ref={handleDropdownRef}>
                   <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio"
                           className="text-gray-500 bg-white hover:bg-gray-100 rounded-lg text-sm px-3 py-1.5 "
-                          type="button">
+                          type="button" onClick={toggleDropdown}>
                     <p className={"inline-block"}>دسته بندی ها</p>
                     <IoIosArrowDown className={"inline-block mr-2"}/>
                   </button>
-                  <div id="dropdownRadio"
-                       className="absolute left-[3.9rem] w-24 z-10 shadow dark:bg-gray-700 dark:divide-gray-600"
-                       data-popper-placement="top">
-                    <ul className="text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownRadioButton">
-                      {fetchData.map((str, index) => (
-                        <li key={index}>
-                          <div
-                            className="flex items-center p-1 border-b rounded-md gap-1 hover:bg-gray-100 bg-white dark:hover:bg-gray-600">
-                            <input id="filter-radio-example-1" type="radio" value="" name="filter-radio"
-                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                            <label htmlFor="filter-radio-example-1"
-                                   className="whitespace-nowrap w-full ml-2 text-xs text-gray-900 rounded dark:text-gray-300">{str.name}</label>
-                          </div>
-                        </li>
-                      ))}
-
-                    </ul>
-                  </div>
+                  {isOpen && (
+                    <div id="dropdownRadio"
+                         className="absolute left-[3.9rem] w-24 z-10 shadow dark:bg-gray-700 dark:divide-gray-600"
+                         data-popper-placement="top">
+                      <ul className="text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioButton">
+                        {fetchData.map((str, index) => (
+                          <li key={index}>
+                            <div
+                              className="flex items-center p-1 border-b border-gray-500 rounded-md gap-1 hover:bg-gray-100 bg-white dark:hover:bg-gray-600">
+                              <input id={`filter-radio-example-${index}`} type="radio" value="" name="filter-radio"
+                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                              <label htmlFor={`filter-radio-example-${index}`}
+                                     className="whitespace-nowrap w-full ml-2 text-xs text-gray-900 rounded dark:text-gray-300">{str.name}</label>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </th>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>عملیات</th>
