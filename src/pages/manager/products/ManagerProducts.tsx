@@ -8,7 +8,7 @@ import {IoIosArrowDown} from "react-icons/io";
 import {BiSearchAlt} from "react-icons/bi";
 
 const ManagerProducts = () => {
-  const searchIcon = <BiSearchAlt className={"text-gray-500 w-4 h-4"}/>
+  const searchIcon = <BiSearchAlt className={"text-gray-500 w-4 h-4"}/>;
   const [fetchData, setFetchData] = useState<SubCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [sourceOfTruth, setSourceOfTruth] = useState<SubCategory[]>([]);
@@ -19,8 +19,43 @@ const ManagerProducts = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
-    console.log(inputValue);
+    event.persist();
+    // @ts-ignore
+    debouncedHandleInputChange(event);
   };
+
+  function debounce<T>(func: { (this: T, event: any): void; apply?: any; }, delay: number | undefined) {
+    let timeoutId: number | undefined;
+    return function (this: T) {
+      const args = arguments;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
+
+  const debouncedHandleInputChange = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    if(event.target.value === '')
+      setFetchData(sourceOfTruth)
+    else {
+      const filteredSubCategory: SubCategory[] = [];
+
+      sourceOfTruth.forEach((subCategory) => {
+        const matchingProducts = subCategory.subCategories.filter((product) =>
+          product.name.toLowerCase().includes(inputValue.toLowerCase())
+        );
+
+        if (matchingProducts.length > 0) {
+          filteredSubCategory.push({
+            categoryId: subCategory.categoryId, id: subCategory.id,
+            name: subCategory.name,
+            subCategories: matchingProducts
+          });
+        }
+      });
+      setFetchData(filteredSubCategory);
+    }
+  }, 2000);
 
   function handleClickOutside(event: MouseEvent) {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -121,7 +156,8 @@ const ManagerProducts = () => {
             <tr>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>تصویر</th>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
-                <Input placeHolder={"نام محصول"} icon={searchIcon} type={"text"} name={"search"} onChange={handleInputChange} classes={"bg-white text-black h-8 max-w"}/>
+                <Input placeHolder={"نام محصول"} icon={searchIcon} type={"text"} name={"search"}
+                       onChange={handleInputChange} classes={"bg-white text-black h-8 max-w"}/>
               </th>
               <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
                 <div className={"relative"} ref={handleDropdownRef}>
