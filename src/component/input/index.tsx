@@ -1,13 +1,13 @@
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 
 interface Props {
   placeHolder: string,
   icon: ReactNode,
   type: string,
-  name: string
-}
+  name: string,
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;}
 
-const Input = ({placeHolder, icon, type, name}: Props) => {
+const Input = ({placeHolder, icon, type, name, onChange}: Props) => {
   return (
     <div>
       <div className="relative rounded-md shadow-sm">
@@ -16,7 +16,7 @@ const Input = ({placeHolder, icon, type, name}: Props) => {
             icon
           }
         </div>
-        <input type={type} name={name}
+        <input type={type} name={name} onChange={onChange}
                className="focus:outline-pink-600 pr-8 outline-none block bg-transparent h-10 w-full sm:text-sm border border-gray-300 rounded-md"
                placeholder={placeHolder}/>
       </div>
