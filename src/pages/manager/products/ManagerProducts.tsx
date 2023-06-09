@@ -17,128 +17,128 @@ const ManagerProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
     let totalProduct = 0;
 
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    event.persist();
-    // @ts-ignore
-    debouncedHandleInputChange(event);
-  };
-
-  function debounce<T>(func: { (this: T, event: any): void; apply?: any; }, delay: number | undefined) {
-    let timeoutId: number | undefined;
-    return function (this: T) {
-      const args = arguments;
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValue(event.target.value);
+      event.persist();
+      // @ts-ignore
+      debouncedHandleInputChange(event);
     };
-  }
 
-  const debouncedHandleInputChange = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    if (event.target.value === "")
-      setFetchData(sourceOfTruth);
-    else {
-      setFetchData(sourceOfTruth.filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase())));
+    function debounce<T>(func: { (this: T, event: any): void; apply?: any; }, delay: number | undefined) {
+      let timeoutId: number | undefined;
+      return function (this: T) {
+        const args = arguments;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+      };
     }
-  }, 2000);
 
-  function handleClickOutside(event: MouseEvent) {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsOpen(false);
+    const debouncedHandleInputChange = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValue(event.target.value);
+      if (event.target.value === "")
+        setFetchData(sourceOfTruth);
+      else {
+        setFetchData(sourceOfTruth.filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase())));
+      }
+    }, 2000);
+
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     }
-  }
 
-  function toggleDropdown() {
-    setIsOpen(!isOpen);
-  }
-
-  const addClickEventListener = () => {
-    document.addEventListener("mousedown", handleClickOutside);
-  };
-
-  const removeClickEventListener = () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-
-  const handleDropdownRef = (node: HTMLDivElement | null) => {
-    dropdownRef.current = node;
-    if (node) {
-      addClickEventListener();
-    } else {
-      removeClickEventListener();
+    function toggleDropdown() {
+      setIsOpen(!isOpen);
     }
-  };
 
-  const filterData = (e: React.MouseEvent<HTMLInputElement>) => {
-    const inputElement = e.target as HTMLInputElement;
-    const id = inputElement.id;
-    const lastWord = id.split("-")[2];
+    const addClickEventListener = () => {
+      document.addEventListener("mousedown", handleClickOutside);
+    };
 
-    if (lastWord === "همه")
-      setFetchData([...sourceOfTruth]);
-    else {
-      const filteredSubCategories = sourceOfTruth.filter(subCategory => subCategory.subCategoryName === lastWord);
-      setFetchData(filteredSubCategories);
-    }
-  };
+    const removeClickEventListener = () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
 
-  const showErrorToastMessage = () => {
-    toast.warning("تو صفحه لاگین بهت گفتم یه چیزی میزنی :|", {
-      position: toast.POSITION.TOP_RIGHT,
-      className: "toast-message"
-    });
-  };
-
-  const forwardButtonHandle = () => {
-    if (currentPage * 10 - 10 + 3 > totalProduct) {
-      showErrorToastMessage();
-    } else
-      setCurrentPage(currentPage + 1);
-  };
-
-  const backButtonHandle = () => {
-    if (currentPage * 10 - 10 === 0)
-      showErrorToastMessage();
-    else
-      setCurrentPage(currentPage - 1);
-  };
-
-
-  useEffect(() => {
-    const fetchSubCategories = async () => {
-      try {
-        const instance = new ApiClient("/sub-category/find-all");
-        const result = await instance.getAllProduct() as Promise<SubCategory>[];
-        const formattedResult = result.flatMap((subCategory: any) => {
-          return subCategory.subCategories.map((product: { id: string; name: string; image: string; }) => ({
-            id: product.id,
-            name: product.name,
-            image: product.image,
-            subCategoryName: subCategory.name,
-          }));
-        });
-        setFetchData(formattedResult);
-        setSourceOfTruth(formattedResult);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
+    const handleDropdownRef = (node: HTMLDivElement | null) => {
+      dropdownRef.current = node;
+      if (node) {
+        addClickEventListener();
+      } else {
+        removeClickEventListener();
       }
     };
-    fetchSubCategories();
-  }, []);
 
-  if (loading) {
-    return (
-      <div className="spinner-container">
-        <div className="spinner"></div>
-        <div>مدیر باید صبور باشه...</div>
-      </div>
-    );
-  } else {
-    totalProduct = fetchData.length;
+    const filterData = (e: React.MouseEvent<HTMLInputElement>) => {
+      const inputElement = e.target as HTMLInputElement;
+      const id = inputElement.id;
+      const lastWord = id.split("-")[2];
+
+      if (lastWord === "همه")
+        setFetchData([...sourceOfTruth]);
+      else {
+        const filteredSubCategories = sourceOfTruth.filter(subCategory => subCategory.subCategoryName === lastWord);
+        setFetchData(filteredSubCategories);
+      }
+    };
+
+    const showErrorToastMessage = () => {
+      toast.warning("تو صفحه لاگین بهت گفتم یه چیزی میزنی :|", {
+        position: toast.POSITION.TOP_RIGHT,
+        className: "toast-message"
+      });
+    };
+
+    const forwardButtonHandle = () => {
+      if (currentPage * 10 - 10 + 3 > totalProduct) {
+        showErrorToastMessage();
+      } else
+        setCurrentPage(currentPage + 1);
+    };
+
+    const backButtonHandle = () => {
+      if (currentPage * 10 - 10 === 0)
+        showErrorToastMessage();
+      else
+        setCurrentPage(currentPage - 1);
+    };
+
+
+    useEffect(() => {
+      const fetchSubCategories = async () => {
+        try {
+          const instance = new ApiClient("/sub-category/find-all");
+          const result = await instance.getAllProduct() as Promise<SubCategory>[];
+          const formattedResult = result.flatMap((subCategory: any) => {
+            return subCategory.subCategories.map((product: { id: string; name: string; image: string; }) => ({
+              id: product.id,
+              name: product.name,
+              image: product.image,
+              subCategoryName: subCategory.name,
+            }));
+          });
+          setFetchData(formattedResult);
+          setSourceOfTruth(formattedResult);
+          setLoading(false);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchSubCategories();
+    }, []);
+
+    if (loading) {
+      return (
+        <div className="spinner-container">
+          <div className="spinner"></div>
+          <div>مدیر باید صبور باشه...</div>
+        </div>
+      );
+    } else {
+      totalProduct = fetchData.length;
     }
 
     return (
@@ -226,7 +226,6 @@ const ManagerProducts = () => {
               </tbody>
             </table>
           </div>
-
           <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
           <span className="text-sm font-normal text-white dark:text-gray-400">موارد <span
             className="font-semibold text-black dark:text-white">{currentPage * 10 - 10 + 1}{" - "}{currentPage * 10}</span> از <span
@@ -234,7 +233,7 @@ const ManagerProducts = () => {
             <ul className="inline-flex items-center -space-x-px">
               <li>
                 <a onClick={forwardButtonHandle}
-                   className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                   className="hover:cursor-pointer block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                   <span className="sr-only">Next</span>
                   <IoMdArrowRoundForward/>
                 </a>
@@ -242,14 +241,13 @@ const ManagerProducts = () => {
 
               <li>
                 <a onClick={backButtonHandle}
-                   className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                   className="hover:cursor-pointer block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                   <span className="sr-only">Previous</span>
                   <IoMdArrowRoundBack/>
                 </a>
               </li>
             </ul>
           </nav>
-
         </div>
       </div>
     );
