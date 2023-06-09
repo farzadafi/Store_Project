@@ -20,7 +20,7 @@ export interface SubCategory {
   subCategories: Product[];
 }
 
-interface Product {
+export interface Product {
   id: string;
   name: string;
   price: number;
@@ -29,4 +29,11 @@ interface Product {
   rate: number;
   image: string;
   subCategoryId: string;
+}
+
+export interface FetchProduct {
+  id: string,
+  name: string,
+  image: string,
+  subCategoryName:string
 }
