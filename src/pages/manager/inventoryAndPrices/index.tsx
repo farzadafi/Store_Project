@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {FetchInventoryProduct} from "@/interfaces";
 import ApiClient from "@/services/api-client";
 import {Button} from "@/component";
