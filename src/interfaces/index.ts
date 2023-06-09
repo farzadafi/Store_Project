@@ -35,5 +35,13 @@ export interface FetchProduct {
   id: string,
   name: string,
   image: string,
-  subCategoryName:string
+  subCategoryName: string
+}
+
+export interface FetchInventoryProduct {
+  id: string,
+  name: string,
+  subCategoryName: string,
+  price: number,
+  quantity: number
 }
