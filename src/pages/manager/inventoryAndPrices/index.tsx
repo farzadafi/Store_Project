@@ -1,14 +1,39 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {FetchInventoryProduct} from "@/interfaces";
 import ApiClient from "@/services/api-client";
 import {Button} from "@/component";
 import {BsPencilSquare} from "react-icons/bs";
+import {toast} from "react-toastify";
+import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 
 const InventoryAndPrices = () => {
   const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  let totalProduct = 0;
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
+
+  const showErrorToastMessage = () => {
+    toast.warning("تو صفحه لاگین بهت گفتم یه چیزی میزنی :|", {
+      position: toast.POSITION.TOP_RIGHT,
+      className: "toast-message"
+    });
+  };
+
+  const forwardButtonHandle = () => {
+    if (currentPage * 10 - 10 + 3 > totalProduct) {
+      showErrorToastMessage();
+    } else
+      setCurrentPage(currentPage + 1);
+  };
+
+  const backButtonHandle = () => {
+    if (currentPage * 10 - 10 === 0)
+      showErrorToastMessage();
+    else
+      setCurrentPage(currentPage - 1);
+  };
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -40,6 +65,8 @@ const InventoryAndPrices = () => {
         <div>یه دقویی وابس...</div>
       </div>
     );
+  } else {
+    totalProduct = fetchData.length;
   }
 
   return (
@@ -51,7 +78,7 @@ const InventoryAndPrices = () => {
 
       <div className={"max-w-4xl mt-10"}>
         <div
-          className="relative overflow-y-auto  h-[40rem] max-sm:h-[30rem] overflow-hidden rounded-xl border border-2">
+          className="relative overflow-y-auto h-[30rem] max-sm:h-[30rem] overflow-hidden rounded-xl border border-2">
           <table className="w-full max-sm:w-screen text-sm text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
             <tr className={"max-sm:"}>
@@ -64,8 +91,9 @@ const InventoryAndPrices = () => {
             </thead>
             <tbody className={""}>
             {
-              fetchData.map((product, index) => (
-                  <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center max-sm:text-right"}
+              // fetchData.map((product, index) => (
+              fetchData.slice(currentPage * 10 - 10, currentPage * 10).map((product, index) => (
+                <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center max-sm:text-right"}
                       key={index}>
                     <td className="max-sm:pr-2 p-2 ">
                       <p className={"flex justify-center bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>
@@ -95,6 +123,30 @@ const InventoryAndPrices = () => {
             </tbody>
           </table>
         </div>
+
+        <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
+          <span className="text-sm font-normal text-white dark:text-gray-400">موارد <span
+            className="font-semibold text-black dark:text-white">{currentPage * 10 - 10 + 1}{" - "}{currentPage * 10}</span> از <span
+            className="font-semibold text-black dark:text-white">{totalProduct}</span> <span>محصول</span>   </span>
+          <ul className="inline-flex items-center -space-x-px">
+            <li>
+              <a onClick={forwardButtonHandle}
+                 className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <span className="sr-only">Next</span>
+                <IoMdArrowRoundForward/>
+              </a>
+            </li>
+
+            <li>
+              <a onClick={backButtonHandle}
+                 className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <span className="sr-only">Previous</span>
+                <IoMdArrowRoundBack/>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
       </div>
     </div>
   );
