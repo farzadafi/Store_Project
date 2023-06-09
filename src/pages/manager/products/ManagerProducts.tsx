@@ -1,6 +1,6 @@
 import {Button, Input} from "@/component";
 import ApiClient from "@/services/api-client";
-import {SubCategory} from "@/interfaces";
+import {FetchProduct, SubCategory} from "@/interfaces";
 import React, {useEffect, useRef, useState} from "react";
 import {BsPencilSquare} from "react-icons/bs";
 import {RiDeleteBin6Line} from "react-icons/ri";
@@ -9,10 +9,16 @@ import {BiSearchAlt} from "react-icons/bi";
 
 const ManagerProducts = () => {
   const searchIcon = <BiSearchAlt className={"text-gray-500 w-4 h-4"}/>;
-  const [fetchData, setFetchData] = useState<SubCategory[]>([]);
+  const [fetchData, setFetchData] = useState<FetchProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sourceOfTruth, setSourceOfTruth] = useState<SubCategory[]>([]);
+  const [sourceOfTruth, setSourceOfTruth] = useState<FetchProduct[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
+  // const [currentPage, setCurrentPage] = useState(1);
+  // let totalProduct = 0;
+  // let totalPages = 0;
+  // let paginatedProducts = []
+
+  // console.log(totalPages);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -35,25 +41,10 @@ const ManagerProducts = () => {
 
   const debouncedHandleInputChange = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
-    if(event.target.value === '')
-      setFetchData(sourceOfTruth)
+    if (event.target.value === "")
+      setFetchData(sourceOfTruth);
     else {
-      const filteredSubCategory: SubCategory[] = [];
-
-      sourceOfTruth.forEach((subCategory) => {
-        const matchingProducts = subCategory.subCategories.filter((product) =>
-          product.name.toLowerCase().includes(inputValue.toLowerCase())
-        );
-
-        if (matchingProducts.length > 0) {
-          filteredSubCategory.push({
-            categoryId: subCategory.categoryId, id: subCategory.id,
-            name: subCategory.name,
-            subCategories: matchingProducts
-          });
-        }
-      });
-      setFetchData(filteredSubCategory);
+      setFetchData(sourceOfTruth.filter((product) => product.name.toLowerCase().includes(inputValue.toLowerCase())));
     }
   }, 2000);
 
@@ -92,7 +83,7 @@ const ManagerProducts = () => {
     if (lastWord === "همه")
       setFetchData([...sourceOfTruth]);
     else {
-      const filteredSubCategories = sourceOfTruth.filter(subCategory => subCategory.name === lastWord);
+      const filteredSubCategories = sourceOfTruth.filter(subCategory => subCategory.subCategoryName === lastWord);
       setFetchData(filteredSubCategories);
     }
   };
@@ -103,29 +94,20 @@ const ManagerProducts = () => {
       try {
         const instance = new ApiClient("/sub-category/find-all");
         const result = await instance.getAllProduct() as Promise<SubCategory>[];
-        const formattedResult = result.map((subCategory: any) => {
-          return {
-            id: subCategory.id,
-            name: subCategory.name,
-            categoryId: subCategory.categoryId,
-            subCategories: subCategory.subCategories
-              ? subCategory.subCategories.map((product: any) => {
-                return {
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                  quantity: product.quantity,
-                  description: product.description,
-                  rate: product.rate,
-                  image: product.image,
-                  subCategoryId: product.subCategoryId
-                };
-              })
-              : []
-          };
+        const formattedResult = result.flatMap((subCategory: any) => {
+          return subCategory.subCategories.map((product: { id: string; name: string; image: string; }) => ({
+            id: product.id,
+            name: product.name,
+            image: product.image,
+            subCategoryName: subCategory.name,
+          }));
         });
         setFetchData(formattedResult);
         setSourceOfTruth(formattedResult);
+        // totalProduct = formattedResult.reduce((total, subCategory) => {
+        //   return total + subCategory.subCategories.reduce((subtotal:number, product:Product) => subtotal + (product.quantity || 0), 0);
+        // }, 0) / 10;
+        // totalPages = Math.ceil(totalProduct / 10);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -172,21 +154,26 @@ const ManagerProducts = () => {
                          className="absolute left-[3.9rem] w-24 z-10 shadow dark:bg-gray-700 dark:divide-gray-600"
                          data-popper-placement="top">
                       <ul className="text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioButton">
-                        {[
-                          {name: "همه"},
-                          ...sourceOfTruth
-                        ].map((str, index) => (
-                          <li key={index}>
-                            <div
-                              className="flex items-center p-1 border-b border-gray-500 rounded-md gap-1 hover:bg-gray-100 bg-white dark:hover:bg-gray-600">
-                              <input onClick={filterData} id={`filter-radio-${str.name}`} type="radio" value=""
-                                     name="filter-radio"
-                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                              <label htmlFor={`filter-radio-${str.name}`}
-                                     className="whitespace-nowrap w-full ml-2 text-xs text-gray-900 rounded dark:text-gray-300">{str.name}</label>
-                            </div>
-                          </li>
-                        ))}
+                        {[{
+                          id: "",
+                          name: "",
+                          image: "",
+                          subCategoryName: "همه"
+                        }, ...sourceOfTruth]
+                          .map((str, _index) => str.subCategoryName)
+                          .filter((value, index, self) => self.indexOf(value) === index)
+                          .map((uniqueValue, index) => (
+                            <li key={index}>
+                              <div
+                                className="flex items-center p-1 border-b border-gray-500 rounded-md gap-1 hover:bg-gray-100 bg-white dark:hover:bg-gray-600">
+                                <input onClick={filterData} id={`filter-radio-${uniqueValue}`} type="radio" value=""
+                                       name="filter-radio"
+                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                <label htmlFor={`filter-radio-${uniqueValue}`}
+                                       className="whitespace-nowrap w-full ml-2 text-xs text-gray-900 rounded dark:text-gray-300">{uniqueValue}</label>
+                              </div>
+                            </li>
+                          ))}
                       </ul>
                     </div>
                   )}
@@ -196,8 +183,9 @@ const ManagerProducts = () => {
             </tr>
             </thead>
             <tbody className={""}>
-            {fetchData.map((subCategory) => (
-              subCategory.subCategories.map((product, index) => (
+            {
+              // fetchData.slice(currentPage * 10 - 10, currentPage * 10).map((subCategory) => (
+              fetchData.map((product, index) => (
                   <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center max-sm:text-right"}
                       key={index}>
                     <td
@@ -206,7 +194,7 @@ const ManagerProducts = () => {
                            src={"data:image/png;base64," + product.image} alt="imageUrl"/>
                     </td>
                     <td className="whitespace-nowrap max-sm:pl-24">{product.name}</td>
-                    <td className="max-sm:pr-2">{subCategory.name}</td>
+                    <td className="max-sm:pr-2">{product.subCategoryName}</td>
                     <td className="whitespace-nowrap py-4 text-sm flex">
                       <Button classes={"max-sm:p-0"} variant={"edit"}>ویرایش
                         <BsPencilSquare/>
@@ -217,10 +205,12 @@ const ManagerProducts = () => {
                     </td>
                   </tr>
                 )
-              )))}
+              )
+            }
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
   );
