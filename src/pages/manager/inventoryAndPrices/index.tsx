@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
-import {SubCategory} from "@/interfaces";
+import {FetchInventoryProduct} from "@/interfaces";
 import ApiClient from "@/services/api-client";
 import {Button} from "@/component";
 import {BsPencilSquare} from "react-icons/bs";
 
 const InventoryAndPrices = () => {
-  const [fetchData, setFetchData] = useState<SubCategory[]>([]);
+  const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
@@ -14,27 +14,15 @@ const InventoryAndPrices = () => {
     const fetchSubCategories = async () => {
       try {
         const instance = new ApiClient("/sub-category/find-all");
-        const result = await instance.getAllProduct() as Promise<SubCategory>[];
-        const formattedResult = result.map((subCategory: any) => {
-          return {
-            id: subCategory.id,
-            name: subCategory.name,
-            categoryId: subCategory.categoryId,
-            subCategories: subCategory.subCategories
-              ? subCategory.subCategories.map((product: any) => {
-                return {
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                  quantity: product.quantity,
-                  description: product.description,
-                  rate: product.rate,
-                  image: product.image,
-                  subCategoryId: product.subCategoryId
-                };
-              })
-              : []
-          };
+        const result = await instance.getAllProduct() as Promise<FetchInventoryProduct>[];
+        const formattedResult = result.flatMap((subCategory: any) => {
+          return subCategory.subCategories.map((product: { id: string; name: string; price: number; quantity: number }) => ({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: product.quantity,
+            subCategoryName: subCategory.name,
+          }));
         });
         setFetchData(formattedResult);
         setLoading(false);
@@ -62,7 +50,8 @@ const InventoryAndPrices = () => {
       </div>
 
       <div className={"max-w-4xl mt-10"}>
-        <div className="relative overflow-y-auto  h-[40rem] max-sm:h-[30rem] overflow-hidden rounded-xl border border-2">
+        <div
+          className="relative overflow-y-auto  h-[40rem] max-sm:h-[30rem] overflow-hidden rounded-xl border border-2">
           <table className="w-full max-sm:w-screen text-sm text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
             <tr className={"max-sm:"}>
@@ -74,13 +63,13 @@ const InventoryAndPrices = () => {
             </tr>
             </thead>
             <tbody className={""}>
-            {fetchData.map((subCategory) => (
-              subCategory.subCategories.map((product, index) => (
+            {
+              fetchData.map((product, index) => (
                   <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center max-sm:text-right"}
                       key={index}>
                     <td className="max-sm:pr-2 p-2 ">
                       <p className={"flex justify-center bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>
-                        {subCategory.name}
+                        {product.subCategoryName}
                       </p>
                     </td>
                     <td className="max-sm:pr-2 p-2">
@@ -102,7 +91,7 @@ const InventoryAndPrices = () => {
                     </td>
                   </tr>
                 )
-              )))}
+              )}
             </tbody>
           </table>
         </div>
