@@ -4,6 +4,7 @@ import com.farzadafi.online_store.dto.ReturnMessage;
 import com.farzadafi.online_store.jwt.UsernameAndPasswordAuthenticationRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,5 +41,11 @@ public class LoginController {
         ResponseEntity<Void> response = restTemplate.postForEntity("http://localhost:8080/login", request, Void.class);
         String token = Objects.requireNonNull(response.getHeaders().get("Authorization")).get(0).substring(7);
         return new ResponseEntity<>(new ReturnMessage(token, 200), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/verify-token")
+    public String verifyToken() {
+        return "OK";
     }
 }
