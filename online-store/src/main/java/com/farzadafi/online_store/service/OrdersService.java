@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public record OrdersService(OrdersRepository ordersRepository) {
 
     public void save(Orders orders) {
+        orders.setId(UUID.randomUUID().toString());
+        orders.setOrderTime(LocalDateTime.now());
         ordersRepository.save(orders).subscribe();
     }
 
