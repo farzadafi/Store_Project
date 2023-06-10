@@ -93,7 +93,7 @@ const ManagerProducts = () => {
     };
 
     const forwardButtonHandle = () => {
-      if (currentPage * 10 - 10 + 3 > totalProduct) {
+      if ( (totalProduct < 10) || currentPage * 10 - 10 + 3 > totalProduct) {
         showErrorToastMessage();
       } else
         setCurrentPage(currentPage + 1);
