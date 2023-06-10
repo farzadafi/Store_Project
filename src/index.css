@@ -60,3 +60,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #a1a1a1;
 }
+
+.dir-ltr {
+    direction: ltr;
+}
