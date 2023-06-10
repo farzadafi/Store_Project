@@ -45,3 +45,22 @@ export interface FetchInventoryProduct {
   price: number,
   quantity: number
 }
+
+export interface Orders {
+  id: string,
+  customerName: string,
+  address: string,
+  phoneNumber: string,
+  isDeliver: boolean,
+  deliverTime: string,
+  orderTime: string,
+  totalPrice: number,
+  purchaseOrders: PurchaseOrder[]
+}
+
+interface PurchaseOrder {
+  id: string
+  productId: string,
+  productName: string,
+  productPrice: number
+}
