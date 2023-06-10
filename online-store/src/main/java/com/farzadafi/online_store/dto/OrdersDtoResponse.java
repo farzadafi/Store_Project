@@ -1,7 +1,6 @@
 package com.farzadafi.online_store.dto;
 
-import com.farzadafi.online_store.model.Product;
-
+import com.farzadafi.online_store.model.PurchaseOrder;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -13,5 +12,5 @@ public record OrdersDtoResponse(String id,
                                 LocalDateTime deliverTime,
                                 LocalDateTime orderTime,
                                 Long totalPrice,
-                                Set<Product> products) {
+                                Set<PurchaseOrder> purchaseOrders) {
 }
