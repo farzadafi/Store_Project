@@ -8,6 +8,7 @@ import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {toast} from "react-toastify";
 
 const OrdersProduct = () => {
+  const [sourceOfTruth, setSourceOfTruth] = useState<Orders[]>([]);
   const [fetchData, setFetchData] = useState<Orders[]>([]);
   const [loading, setLoading] = useState(true);
   const [cookies] = useCookies(["token"]);
@@ -48,6 +49,16 @@ const OrdersProduct = () => {
       setCurrentPage(currentPage - 1);
   };
 
+  const showDeliverOrder = () => {
+    const filteredOrders = sourceOfTruth.filter(order => order.isDeliver);
+    setFetchData(filteredOrders)
+  }
+
+  const showNotDeliverOrder = () => {
+    const filteredOrders = sourceOfTruth.filter(order => !order.isDeliver);
+    setFetchData(filteredOrders)
+  }
+
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -55,6 +66,7 @@ const OrdersProduct = () => {
         const instance = new ApiClient("/order/get-all");
         const result = await instance.getAllOrders(token) as Orders[];
         setFetchData(result);
+        setSourceOfTruth(result);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -83,13 +95,13 @@ const OrdersProduct = () => {
           <div className="flex gap-3 items-center">
             <label htmlFor="default-radio-1" className="text-sm font-medium text-gray-900 dark:text-gray-300">سفارش های
               تحویل شده</label>
-            <input id="default-radio-1" type="radio" value="" name="default-radio"
+            <input type="radio" onClick={showDeliverOrder} name={'default-radio'}
                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
           </div>
           <div className="flex gap-3 items-center">
             <label htmlFor="default-radio-2" className="text-sm font-medium text-gray-900 dark:text-gray-300">سفارش های
               در انتظار ارسال</label>
-            <input checked id="default-radio-2" type="radio" value="" name="default-radio"
+            <input type="radio" name="default-radio" onClick={showNotDeliverOrder}
                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
 
           </div>
