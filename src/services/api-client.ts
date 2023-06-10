@@ -2,7 +2,7 @@ import axios from "axios";
 import {LoginFormValue} from "@/interfaces";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080"
+  baseURL: "http://localhost:8080",
 })
 
 class APIClient<T> {
@@ -20,6 +20,15 @@ class APIClient<T> {
   getAllProduct = () => {
     return axiosInstance
       .get<T>(this.endPoint)
+      .then(result => result.data)
+  }
+
+  getAllOrders = (cookie: string) => {
+    const options = {
+      headers: {'Authorization': 'Bearer ' + cookie}
+    };
+    return axiosInstance
+      .get<T>(this.endPoint, options)
       .then(result => result.data)
   }
 }
