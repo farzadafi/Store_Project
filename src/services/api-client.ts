@@ -31,6 +31,15 @@ class APIClient<T> {
       .get<T>(this.endPoint, options)
       .then(result => result.data)
   }
+
+  verifyToken = (cookie: string) => {
+    const options = {
+      headers: {'Authorization': 'Bearer ' + cookie}
+    };
+    return axiosInstance
+      .get<T>(this.endPoint, options)
+      .then(result => result.data)
+  }
 }
 
 
