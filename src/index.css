@@ -36,6 +36,12 @@ body {
     background: linear-gradient(45deg, rgb(214, 11, 245) 0%, rgba(160,0,255,1) 100%) !important;
 }
 
+.Toastify__toast--success {
+    border: 2px solid #07bb0c !important;
+    border-radius: 10px !important;
+    background: linear-gradient(45deg, rgb(214, 11, 245) 0%, rgba(160,0,255,1) 100%) !important;
+}
+
 .spinner-container {
     display: flex;
     align-items: center;
