@@ -148,7 +148,7 @@ const ManagerProducts = () => {
           <Button classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>افزودن کالا</Button>
         </div>
         <div className={"max-w-4xl mt-10 max-sm:w-72 "}>
-          <div className="relative overflow-y-auto  h-[30rem] max-sm:h-[30rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
+          <div className="relative overflow-y-auto  h-[30rem] max-sm:h-[25rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
             <table className="w-full max-sm:w-[40rem] text-sm text-white dark:text-gray-400 table-fixed">
               <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
               <tr>
