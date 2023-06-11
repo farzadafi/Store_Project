@@ -42,6 +42,13 @@ const LoginPage = () => {
     });
   };
 
+  const showNetworkErrorToastMessage = () => {
+    toast.error("بک اند کارتون از دست رفت", {
+      position: toast.POSITION.TOP_RIGHT,
+      className: "toast-message"
+    });
+  };
+
   return (
     <div className={"h-screen bg-gradiant"}>
       <div
@@ -70,8 +77,11 @@ const LoginPage = () => {
                       setCookie("token", result.message);
                       showSuccessfulToastMessage();
                       navigate("/main-manager-page");
-                    }).catch((_error: ResultMessage) => {
-                        showErrorToastMessage()
+                    }).catch((error: ResultMessage) => {
+                      if (error.message === "Network Error")
+                        showNetworkErrorToastMessage();
+                      else
+                        showErrorToastMessage();
                     });
                     setSubmitting(false);
                   }, 400);
