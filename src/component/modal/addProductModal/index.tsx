@@ -121,7 +121,14 @@ const AddProductModal = ({handleClose}) => {
                         placeholder="توضیحات"></textarea>
                       <ErrorMessage name="description" component="div" className={"text-red-500 text-xs"}/>
                     </div>
-                    <Button type={"submit"} variant={"login"}>ورود</Button>
+                    <div className={"flex gap-2"}>
+                      <div className={"w-[20rem]"}>
+                        <Button onClick={handleClose} type={"submit"} classes={"bg-red-500 w-full flex justify-center"} variant={"common"}>لغو</Button>
+                      </div>
+                      <div className={"w-[20rem]"}>
+                        <Button type={"submit"} classes={"bg-blue-500 w-full flex justify-center"} variant={"common"}>ذخیره</Button>
+                      </div>
+                    </div>
                   </div>
                 </Form>
               )}
