@@ -88,10 +88,10 @@ const OrdersProduct = () => {
 
   return (
     <div className={"flex flex-col justify-center items-center"}>
-      <div className={"flex justify-between items-center p-2 w-full"}>
-        <p className={"text-white"}>مدیریت سفارش ها</p>
+      <div className={"flex justify-between items-center p-2 max-sm:flex-col w-full"}>
+        <p className={"whitespace-nowrap max-sm:text-center text-white"}>مدیریت سفارش ها</p>
 
-        <div className={"flex items-center gap-6"}>
+        <div className={"flex items-center gap-6 max-sm:flex-col max-sm:mt-2"}>
           <div className="flex gap-3 items-center">
             <label htmlFor="default-radio-1" className="text-sm font-medium text-gray-900 dark:text-gray-300">سفارش های
               تحویل شده</label>
@@ -103,19 +103,16 @@ const OrdersProduct = () => {
               در انتظار ارسال</label>
             <input type="radio" name="default-radio" onClick={showNotDeliverOrder}
                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-
           </div>
         </div>
-
-
       </div>
-      <div className={"max-w-4xl mt-10"}>
-        <div className="relative overflow-y-auto h-[30rem] max-sm:h-[30rem] overflow-hidden rounded-xl border border-2">
-          <table className="w-full max-sm:w-screen text-sm text-white dark:text-gray-400 table-fixed">
+      <div className={"max-w-4xl mt-10 max-sm:w-72"}>
+        <div className="relative overflow-y-auto h-[30rem] max-sm:h-[20rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
+          <table className="w-full max-sm:w-[40rem] text-sm text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
-            <tr className={"max-sm:"}>
+            <tr>
               {tableHeaderArray.map((str, index) => (
-                <th scope="col" className="py-3 sm:text-center max-sm:text-right max-sm:p-3" key={index}>
+                <th scope="col" className="py-3 sm:text-center" key={index}>
                   {str}
                 </th>
               ))}
@@ -146,7 +143,7 @@ const OrdersProduct = () => {
                     </td>
                     <td className="flex items-center justify-center max-sm:pr-2 p-2">
                       <div>
-                        <Button variant={"edit"}>
+                        <Button classes={"max-sm:py-2"} variant={"edit"}>
                           <TfiThemifyFavicon/>
                           <p>بررسی سفارش</p>
                         </Button>
