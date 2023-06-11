@@ -1,4 +1,4 @@
-import {Button, Input} from "@/component";
+import {AddProductModal, Button, Input} from "@/component";
 import ApiClient from "@/services/api-client";
 import {FetchProduct, SubCategory} from "@/interfaces";
 import React, {useEffect, useRef, useState} from "react";
@@ -15,6 +15,7 @@ const ManagerProducts = () => {
     const [sourceOfTruth, setSourceOfTruth] = useState<FetchProduct[]>([]);
     const [inputValue, setInputValue] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [showModal, setShowModal] = useState(false);
     let totalProduct = 0;
 
     const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +94,7 @@ const ManagerProducts = () => {
     };
 
     const forwardButtonHandle = () => {
-      if ( (totalProduct < 10) || currentPage * 10 - 10 + 3 > totalProduct) {
+      if ((totalProduct < 10) || currentPage * 10 - 10 + 3 > totalProduct) {
         showWarningToastMessage();
       } else
         setCurrentPage(currentPage + 1);
@@ -141,14 +142,31 @@ const ManagerProducts = () => {
       totalProduct = fetchData.length;
     }
 
+
+    const handleModalOpen = () => {
+      setShowModal(true);
+    };
+
+    const handleModalClose = () => {
+      setShowModal(false);
+    };
+
     return (
       <div className={"flex flex-col justify-center items-center"}>
         <div className={"flex gap-36 justify-evenly items-center p-4 w-full "}>
           <p className={"text-white whitespace-nowrap"}>مدریریت کالا ها</p>
-          <Button classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>افزودن کالا</Button>
+          <Button onClick={handleModalOpen} classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>افزودن
+            کالا</Button>
+          {showModal && (
+            <div onClick={handleModalClose} className="fixed inset-0 bg-black opacity-30 z-40"></div>
+          )}
+          {showModal && (
+            <AddProductModal handleClose={handleModalClose}/>
+          )}
         </div>
         <div className={"max-w-4xl mt-10 max-sm:w-72 "}>
-          <div className="relative overflow-y-auto  h-[30rem] max-sm:h-[25rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
+          <div
+            className="relative overflow-y-auto  h-[30rem] max-sm:h-[25rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
             <table className="w-full max-sm:w-[40rem] text-sm text-white dark:text-gray-400 table-fixed">
               <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
               <tr>
@@ -201,10 +219,8 @@ const ManagerProducts = () => {
               <tbody className={""}>
               {
                 fetchData.slice(currentPage * 10 - 10, currentPage * 10).map((product, index) => (
-                    <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center "}
-                        key={index}>
-                      <td
-                        className="whitespace-nowrap pl-4 pr-3 text-sm font-medium text-white sm:pl-2 ">
+                    <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center "} key={index}>
+                      <td className="whitespace-nowrap pl-4 pr-3 text-sm font-medium text-white sm:pl-2 ">
                         <img className="w-12 h-12 max-sm:w-8 max-sm:h-8 flex-shrink-0 mx-auto"
                              src={"data:image/png;base64," + product.image} alt="imageUrl"/>
                       </td>
