@@ -30,21 +30,21 @@ const LoginPage = () => {
 
   const showSuccessfulToastMessage = () => {
     toast.success("خان اول رو تونستی رد کنی بدبخت", {
-      position: toast.POSITION.TOP_RIGHT,
+      position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
   };
 
   const showErrorToastMessage = () => {
     toast.error("مریضی درخواست الکی میزنی سمت سرور؟", {
-      position: toast.POSITION.TOP_RIGHT,
+      position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
   };
 
   const showNetworkErrorToastMessage = () => {
     toast.error("بک اند کارتون از دست رفت", {
-      position: toast.POSITION.TOP_RIGHT,
+      position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
   };
