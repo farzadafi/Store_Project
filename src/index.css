@@ -19,6 +19,11 @@ body {
     width: max-content;
 }
 
+.Toastify__toast-body {
+    color: black;
+    font-family: Vazir, serif;
+}
+
 .spinner-container {
     display: flex;
     align-items: center;
