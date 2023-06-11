@@ -2,6 +2,7 @@ package com.farzadafi.online_store.controller;
 
 import com.farzadafi.online_store.dto.ReturnMessage;
 import com.farzadafi.online_store.dto.SubCategoryDto;
+import com.farzadafi.online_store.dto.SubCategoryNameResponse;
 import com.farzadafi.online_store.mapper.SubCategoryMapper;
 import com.farzadafi.online_store.model.SubCategory;
 import com.farzadafi.online_store.service.SubCategoryService;
@@ -40,5 +41,11 @@ public class SubCategoryController {
     @GetMapping("find-all")
     public List<SubCategory> findAllCategory() {
         return subCategoryService.findAllSubCategory();
+    }
+
+    @GetMapping("find-all-name")
+    public List<SubCategoryNameResponse> findAllSubCategoryName() {
+        List<SubCategory> allSubCategory = subCategoryService.findAllSubCategory();
+        return SubCategoryMapper.INSTANCE.modelsNameToDtos(allSubCategory);
     }
 }
