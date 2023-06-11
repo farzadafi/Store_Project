@@ -8,11 +8,12 @@ import {
   ResultMessage, SubCategoryName,
 } from "@/interfaces";
 import ApiClient from "@/services/api-client";
-import {MdDriveFileRenameOutline} from "react-icons/md";
+import {MdDriveFileRenameOutline, MdOutlineDescription} from "react-icons/md";
 import {useEffect, useState} from "react";
 
 const closeIcon = <IoIosCloseCircleOutline className={"w-5 h-5 text-red-500"}/>;
 const productName = <MdDriveFileRenameOutline className={"text-gray-500"}/>;
+const descriptionIcon = <MdOutlineDescription className={"text-gray-500"}/>;
 
 const initialValues: ProductFormValue = {
   productImage: null,
@@ -100,7 +101,7 @@ const AddProductModal = ({handleClose}) => {
                     </div>
                     <div>
                       <select
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         {[
                           <option key="0" value="">
                             دسته بندی </option>,
@@ -113,11 +114,11 @@ const AddProductModal = ({handleClose}) => {
                             ))
                         ]}
                       </select>
-
                     </div>
                     <div>
-                      <FormikInput variant={"addProduct"} icon={null} type={"text"} name={"description"}
-                                   placeHolder={"توضیحات"}/>
+                      <textarea
+                        className="block p-2.5 w-full h-36 resize-none text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="توضیحات"></textarea>
                       <ErrorMessage name="description" component="div" className={"text-red-500 text-xs"}/>
                     </div>
                     <Button type={"submit"} variant={"login"}>ورود</Button>
@@ -125,7 +126,6 @@ const AddProductModal = ({handleClose}) => {
                 </Form>
               )}
             </Formik>
-
           </div>
         </div>
       </div>
