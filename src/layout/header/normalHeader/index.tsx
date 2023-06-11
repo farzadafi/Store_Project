@@ -23,6 +23,8 @@ const NormalHeader = () => {
         } catch (error) {
           navigate("/login");
         }
+      }else {
+        navigate("/login");
       }
     }
 
