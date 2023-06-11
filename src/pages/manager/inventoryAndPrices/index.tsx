@@ -71,18 +71,18 @@ const InventoryAndPrices = () => {
 
   return (
     <div className={"flex flex-col justify-center items-center"}>
-      <div className={"flex justify-between items-center p-2 w-full"}>
-        <p className={"text-white"}>مدیریت موجودی و قیمت ها</p>
-        <Button classes={"max-sm:h-8"} variant={"managerButton"}>ذخیره</Button>
+      <div className={"flex gap-36 justify-evenly items-center p-4 w-full max-sm:gap-24"}>
+        <p className={"text-white whitespace-nowrap"}>مدیریت موجودی و قیمت ها</p>
+        <Button classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>ذخیره</Button>
       </div>
 
-      <div className={"max-w-4xl mt-10"}>
-        <div className="relative overflow-y-auto h-[30rem] max-sm:h-[30rem] overflow-hidden rounded-xl border border-2">
-          <table className="w-full max-sm:w-screen text-sm text-white dark:text-gray-400 table-fixed">
+      <div className={"max-w-4xl mt-10 max-sm:w-72 "}>
+        <div className="relative overflow-y-auto h-[30rem] max-sm:h-[25rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
+          <table className="w-full max-sm:w-[40rem] text-sm text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
-            <tr className={"max-sm:"}>
+            <tr>
               {tableHeaderArray.map((str, index) => (
-                <th scope="col" className="py-3 sm:text-center max-sm:text-right max-sm:p-3" key={index}>
+                <th scope="col" className="py-3 sm:text-center" key={index}>
                   {str}
                 </th>
               ))}
