@@ -10,7 +10,8 @@ interface Props {
 }
 
 const variants: Record<string, string> = {
-  login: `absolute inset-y-0 left-0 pl-[12.5rem] flex items-center pointer-events-none`
+  login: `absolute inset-y-0 left-0 pl-[12.5rem] flex items-center pointer-events-none`,
+  addProduct: `absolute inset-y-0 left-0 pl-[22.3rem] flex items-center pointer-events-none`
 };
 
 const FormikInput = ({type, name, placeHolder, icon, variant}: Props) => {
