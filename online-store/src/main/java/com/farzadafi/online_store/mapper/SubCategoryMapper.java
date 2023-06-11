@@ -1,6 +1,7 @@
 package com.farzadafi.online_store.mapper;
 
 import com.farzadafi.online_store.dto.SubCategoryDto;
+import com.farzadafi.online_store.dto.SubCategoryNameResponse;
 import com.farzadafi.online_store.model.SubCategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,4 +16,6 @@ public interface SubCategoryMapper {
     SubCategory dtoToModel(SubCategoryDto subCategoryDto);
 
     List<SubCategoryDto> modelsToDtos(List<SubCategory> subCategories);
+
+    List<SubCategoryNameResponse> modelsNameToDtos(List<SubCategory> subCategories);
 }
