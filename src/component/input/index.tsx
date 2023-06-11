@@ -13,7 +13,7 @@ const Input = ({placeHolder, icon, type, name, onChange, classes}: Props) => {
   return (
     <div>
       <div className="relative rounded-md shadow-sm">
-        <div className="absolute inset-y-0 left-0 pl-48 flex items-center pointer-events-none">
+        <div className="absolute inset-y-0 left-0 pl-48 flex items-center pointer-events-none max-sm:pl-32">
           {
             icon
           }
