@@ -8,6 +8,21 @@ export interface LoginErrors {
   password?: string;
 }
 
+export interface ProductFormValue {
+  productImage: null | File;
+  productName: string;
+  category: string;
+  description: string;
+}
+
+export interface ProductSaveError {
+  productImage?: string,
+  productName?: string,
+  category?: string,
+  description?: string
+}
+
+
 export interface ResultMessage {
   message: string,
   code: number
@@ -63,4 +78,9 @@ interface PurchaseOrder {
   productId: string,
   productName: string,
   productPrice: number
+}
+
+export interface SubCategoryName {
+  id: string,
+  name: string
 }
