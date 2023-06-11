@@ -92,11 +92,11 @@ const LoginPage = () => {
               <div className={"flex flex-col gap-6"}>
                 <h1 className={"text-3xl text-center whitespace-nowrap"}>فرم ورود به سامانه</h1>
                 <div>
-                  <FormikInput icon={userIcon} type={"text"} name={"username"} placeHolder={"نام کاربری"}/>
+                  <FormikInput variant={"login"} icon={userIcon} type={"text"} name={"username"} placeHolder={"نام کاربری"}/>
                   <ErrorMessage name="username" component="div" className={"text-red-500 text-xs"}/>
                 </div>
                 <div>
-                  <FormikInput icon={passwordIcon} type={"password"} name={"password"} placeHolder={"رمز عبور"}/>
+                  <FormikInput variant={"login"} icon={passwordIcon} type={"password"} name={"password"} placeHolder={"رمز عبور"}/>
                   <ErrorMessage name="password" component="div" className={"text-red-500 text-xs"}/>
                 </div>
                 <a ref={forgotPasswordTextRef} onClick={handleForgotPasswordClick} className={"text-xs -mt-5"} href="#">رمز
