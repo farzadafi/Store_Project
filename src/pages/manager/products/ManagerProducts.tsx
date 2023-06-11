@@ -143,17 +143,17 @@ const ManagerProducts = () => {
 
     return (
       <div className={"flex flex-col justify-center items-center"}>
-        <div className={"flex justify-between items-center p-2 w-full"}>
-          <p>مدریریت کالا ها</p>
-          <Button classes={"max-sm:h-8"} variant={"managerButton"}>افزودن کالا</Button>
+        <div className={"flex gap-36 justify-evenly items-center p-4 w-full "}>
+          <p className={"text-white whitespace-nowrap"}>مدریریت کالا ها</p>
+          <Button classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>افزودن کالا</Button>
         </div>
-        <div className={"max-w-4xl mt-10"}>
-          <div className="relative overflow-y-auto  h-[30rem] max-sm:h-[30rem] overflow-hidden rounded-xl border">
-            <table className="w-full max-sm:w-screen text-sm text-white dark:text-gray-400 table-fixed">
+        <div className={"max-w-4xl mt-10 max-sm:w-72 "}>
+          <div className="relative overflow-y-auto  h-[30rem] max-sm:h-[30rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
+            <table className="w-full max-sm:w-[40rem] text-sm text-white dark:text-gray-400 table-fixed">
               <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
               <tr>
-                <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>تصویر</th>
-                <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
+                <th className={"py-3 sm:text-center"}>تصویر</th>
+                <th className={"py-3 sm:text-center"}>
                   <Input placeHolder={"نام محصول"} icon={searchIcon} type={"text"} name={"search"}
                          onChange={handleInputChange} classes={"bg-white text-black h-8 max-w"}/>
                 </th>
@@ -167,7 +167,7 @@ const ManagerProducts = () => {
                     </button>
                     {isOpen && (
                       <div id="dropdownRadio"
-                           className="absolute left-[3.9rem] w-24 z-10 shadow dark:bg-gray-700 dark:divide-gray-600"
+                           className="absolute left-[3.9rem] max-sm:left-[1.9rem] w-24 z-10 shadow dark:bg-gray-700 dark:divide-gray-600"
                            data-popper-placement="top">
                         <ul className="text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioButton">
                           {[{
@@ -195,27 +195,26 @@ const ManagerProducts = () => {
                     )}
                   </div>
                 </th>
-                <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>عملیات</th>
+                <th className={"py-3 sm:text-center"}>عملیات</th>
               </tr>
               </thead>
               <tbody className={""}>
               {
                 fetchData.slice(currentPage * 10 - 10, currentPage * 10).map((product, index) => (
-                    // fetchData.map((product, index) => (
-                    <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center max-sm:text-right"}
+                    <tr className={"border-b dark:bg-gray-800 dark:border-gray-700 text-center "}
                         key={index}>
                       <td
-                        className="whitespace-nowrap pl-4 pr-3 text-sm max-sm:pl-12 font-medium text-white sm:pl-2 max-sm:text-right">
+                        className="whitespace-nowrap pl-4 pr-3 text-sm font-medium text-white sm:pl-2 ">
                         <img className="w-12 h-12 max-sm:w-8 max-sm:h-8 flex-shrink-0 mx-auto"
                              src={"data:image/png;base64," + product.image} alt="imageUrl"/>
                       </td>
-                      <td className="whitespace-nowrap max-sm:pl-24">{product.name}</td>
-                      <td className="max-sm:pr-2">{product.subCategoryName}</td>
+                      <td className="whitespace-nowrap">{product.name}</td>
+                      <td className="">{product.subCategoryName}</td>
                       <td className="whitespace-nowrap py-4 text-sm flex">
-                        <Button classes={"max-sm:p-0"} variant={"edit"}>ویرایش
+                        <Button classes={"max-sm:p-1"} variant={"edit"}>ویرایش
                           <BsPencilSquare/>
                         </Button>
-                        <Button classes={"max-sm:p-0"} variant={"remove"}>حذف
+                        <Button classes={"max-sm:p-1"} variant={"remove"}>حذف
                           <RiDeleteBin6Line/>
                         </Button>
                       </td>
