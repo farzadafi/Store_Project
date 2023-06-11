@@ -14,23 +14,23 @@ const InventoryAndPrices = () => {
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
 
-  const showErrorToastMessage = () => {
+  const showWarningToastMessage = () => {
     toast.warning("تو صفحه لاگین بهت گفتم یه چیزی میزنی :|", {
-      position: toast.POSITION.TOP_RIGHT,
+      position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
   };
 
   const forwardButtonHandle = () => {
     if ( (totalProduct < 10) || currentPage * 10 - 10 + 3 > totalProduct) {
-      showErrorToastMessage();
+      showWarningToastMessage();
     } else
       setCurrentPage(currentPage + 1);
   };
 
   const backButtonHandle = () => {
     if (currentPage * 10 - 10 === 0)
-      showErrorToastMessage();
+      showWarningToastMessage();
     else
       setCurrentPage(currentPage - 1);
   };
