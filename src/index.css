@@ -20,8 +20,14 @@ body {
 }
 
 .Toastify__toast-body {
-    color: black;
+    color: white;
     font-family: Vazir, serif;
+}
+
+.Toastify__toast--warning {
+    border: 1px solid #E78326  !important;
+    border-radius: 10px !important;
+    background: linear-gradient(45deg, rgba(255,0,153,1) 0%, rgba(160,0,255,1) 100%) !important;
 }
 
 .spinner-container {
