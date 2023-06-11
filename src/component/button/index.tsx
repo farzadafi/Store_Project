@@ -6,7 +6,8 @@ const variants: Record<string, string> = {
   managerButton: `${commonClasses} bg-[#569aff]`,
   login: `${commonClasses} bg-gradiant w-full justify-center h-8`,
   edit: `${commonClasses} flex-1 justify-center text-sm bg-[#569aff] flex gap-2`,
-  remove: `${commonClasses} flex-1 justify-center text-sm bg-red-500 flex gap-2`
+  remove: `${commonClasses} flex-1 justify-center text-sm bg-red-500 flex gap-2`,
+  common: `${commonClasses}`
 };
 
 type buttonProps = {
