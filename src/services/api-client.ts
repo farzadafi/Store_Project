@@ -40,6 +40,12 @@ class APIClient<T> {
       .get<T>(this.endPoint, options)
       .then(result => result.data)
   }
+
+  getAllSubCategory = () => {
+    return axiosInstance
+      .get<T>(this.endPoint)
+      .then(result => result.data)
+  }
 }
 
 
