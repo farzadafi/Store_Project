@@ -11,14 +11,14 @@ export interface LoginErrors {
 export interface ProductFormValue {
   productImage: null | File;
   productName: string;
-  category: string;
+  categoryId: string;
   description: string;
 }
 
 export interface ProductSaveError {
   productImage?: string,
   productName?: string,
-  category?: string,
+  categoryId?: string,
   description?: string
 }
 
