@@ -24,6 +24,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @CrossOrigin(methods = RequestMethod.POST, allowCredentials = "true", allowedHeaders = "*", originPatterns = "*", origins = "allowedOriginPatterns")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ReturnMessage> save(@ModelAttribute("productDto") @RequestBody ProductDto productDto) {
