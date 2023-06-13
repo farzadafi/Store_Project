@@ -9,7 +9,7 @@ export interface LoginErrors {
 }
 
 export interface ProductFormValue {
-  productImage: null | File;
+  productImage: File,
   productName: string;
   categoryId: string;
   description: string;
