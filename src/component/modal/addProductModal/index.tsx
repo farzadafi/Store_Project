@@ -1,14 +1,16 @@
 import {Button, FormikInput} from "@/component";
 import {IoIosCloseCircleOutline} from "react-icons/io";
-import {ErrorMessage, Field, Form, Formik, useFormik} from "formik";
+import {ErrorMessage, Field, Form, Formik, FormikProps, useFormik} from "formik";
 import {
   ProductFormValue,
-  ProductSaveError,
+  ProductSaveError, ResultMessage,
   SubCategoryName,
 } from "@/interfaces";
 import ApiClient from "@/services/api-client";
 import {MdDriveFileRenameOutline} from "react-icons/md";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import {useCookies} from "react-cookie";
+import {toast} from "react-toastify";
 
 const closeIcon = <IoIosCloseCircleOutline className={"w-5 h-5 text-red-500"}/>;
 const productName = <MdDriveFileRenameOutline className={"text-gray-500"}/>;
@@ -16,7 +18,7 @@ const productName = <MdDriveFileRenameOutline className={"text-gray-500"}/>;
 const initialValues: ProductFormValue = {
   productImage: new File([""], "default.jpg", {type: "image/jpeg"}),
   productName: "",
-  categoryId: "",
+  subCategoryId: "",
   description: "",
 };
 
@@ -29,9 +31,14 @@ interface TextareaFieldProps {
   };
 }
 
-const AddProductModal = ({handleClose}) => {
-  const [fetchData, setFetchData] = useState<SubCategoryName[]>([]);
+interface Props {
+  handleClose: () => void
+}
 
+const AddProductModal = ({handleClose}:Props) => {
+  const [fetchData, setFetchData] = useState<SubCategoryName[]>([]);
+  const [cookies, _setCookie] = useCookies(["token"]);
+  const formikRef = useRef<FormikProps<ProductFormValue>>(null);
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
@@ -54,6 +61,20 @@ const AddProductModal = ({handleClose}) => {
     },
   });
 
+  const showSuccessfulToastMessage = () => {
+    toast.success("بر طبل شادانه بکوب :))", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+
+  const showErrorToastMessage = () => {
+    toast.error("بعضی وقتا نمیشه اون چیزی که باید بشه :|", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -68,10 +89,11 @@ const AddProductModal = ({handleClose}) => {
                 }
               </Button>
             </div>
-            <Formik initialValues={initialValues} validate={values => {
+            <Formik initialValues={initialValues} innerRef={formikRef} validate={values => {
               const errors: ProductSaveError = {};
+              values.productImage = formik.values.productImage;
 
-              if (values.productImage.name === 'default.jpg')
+              if (values.productImage.size === 0)
                 errors.productImage = "هوووووووووووووووی";
 
               if (!values.productName)
@@ -79,7 +101,7 @@ const AddProductModal = ({handleClose}) => {
               else if (/^.{0,3}$/.test(values.productName))
                 errors.productName = "تو زندگیت سعی کن آدم باشی";
 
-              if (values.categoryId === "") {
+              if (values.subCategoryId === "") {
                 errors.categoryId = "سلکت بار نرفت تو چشت؟";
               }
 
@@ -93,14 +115,19 @@ const AddProductModal = ({handleClose}) => {
 
                     onSubmit={(values, {setSubmitting}) => {
                       setTimeout(() => {
-                        // console.log(values.productImage);
-                        // values.productImage = formik.values.productImage.prototype
-                        // console.log(values.productImage);
-                        // const instance = new ApiClient("/api/login/getToken");
-                        // const resultCall = instance.loginPost(values) as Promise<ResultMessage>;
-                        // resultCall.then((result: ResultMessage) => {
-                        // }).catch((error: ResultMessage) => {
-                        // });
+                        const form = new FormData();
+                        form.append("name", values.productName)
+                        form.append("description", values.description)
+                        form.append("image", values.productImage)
+                        form.append("subCategoryId", values.subCategoryId)
+                        const instance = new ApiClient("/product/add");
+                        const resultCall = instance.addProduct(cookies.token, form) as Promise<ResultMessage>;
+                        resultCall.then((_result: ResultMessage) => {
+                          formikRef.current!.resetForm()
+                          showSuccessfulToastMessage()
+                        }).catch((_error: ResultMessage) => {
+                          showErrorToastMessage()
+                        });
                         setSubmitting(false);
                       }, 400);
 
@@ -108,7 +135,7 @@ const AddProductModal = ({handleClose}) => {
               {() => (
                 <Form>
                   <div className={"flex flex-col gap-6"}>
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex flex-col justify-center w-full">
                       <label htmlFor="dropzone-file"
                              className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -131,8 +158,8 @@ const AddProductModal = ({handleClose}) => {
                           )}
                         </Field>
                       </label>
+                      <ErrorMessage name="productImage" component="div" className={"text-red-500 text-xs mt-2"}/>
                     </div>
-                    <ErrorMessage name="productImage" component="div" className={"text-red-500 text-xs mt-2"}/>
                     <div>
                       <FormikInput variant={"addProduct"} icon={productName} type={"text"} name={"productName"}
                                    placeHolder={"نام کالا"}/>
@@ -141,7 +168,7 @@ const AddProductModal = ({handleClose}) => {
                     <div>
                       <Field
                         className={"bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"}
-                        as={"select"} name={"categoryId"}>
+                        as={"select"} name={"subCategoryId"}>
                         {[
                           <option key="0" value="">
                             دسته بندی </option>,
@@ -154,7 +181,7 @@ const AddProductModal = ({handleClose}) => {
                             ))
                         ]}
                       </Field>
-                      <ErrorMessage name="categoryId" component="div" className={"text-red-500 text-xs mt-2"}/>
+                      <ErrorMessage name="subCategoryId" component="div" className={"text-red-500 text-xs mt-2"}/>
                     </div>
                     <div>
                       <Field name="description">
