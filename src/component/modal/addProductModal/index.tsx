@@ -1,9 +1,9 @@
 import {Button, FormikInput} from "@/component";
 import {IoIosCloseCircleOutline} from "react-icons/io";
-import {ErrorMessage, Field, Form, Formik, FormikProps, useFormik} from "formik";
+import {ErrorMessage, Field, Form, Formik, useFormik} from "formik";
 import {
   ProductFormValue,
-  ProductSaveError, ResultMessage,
+  ProductSaveError,
   SubCategoryName,
 } from "@/interfaces";
 import ApiClient from "@/services/api-client";
@@ -14,12 +14,11 @@ const closeIcon = <IoIosCloseCircleOutline className={"w-5 h-5 text-red-500"}/>;
 const productName = <MdDriveFileRenameOutline className={"text-gray-500"}/>;
 
 const initialValues: ProductFormValue = {
-  productImage: null,
+  productImage: new File([""], "default.jpg", {type: "image/jpeg"}),
   productName: "",
   categoryId: "",
-  description: ""
+  description: "",
 };
-
 
 interface TextareaFieldProps {
   field: {
@@ -48,10 +47,10 @@ const AddProductModal = ({handleClose}) => {
 
   const formik = useFormik({
     initialValues: {
-      productImage: "",
+      productImage: new File([""], "default.jpg", {type: "image/jpeg"}),
     },
     onSubmit: values => {
-      console.log("farzad");
+      console.log(values);
     },
   });
 
@@ -69,41 +68,43 @@ const AddProductModal = ({handleClose}) => {
                 }
               </Button>
             </div>
-            <Formik initialValues={initialValues}
-                    validate={values => {
-                      const errors: ProductSaveError = {};
-                      if (!formik.values.productImage)
-                        errors.productImage = "هوووووووووووووووی";
+            <Formik initialValues={initialValues} validate={values => {
+              const errors: ProductSaveError = {};
 
-                      if (!values.productName)
-                        errors.productName = "چی میزنی؟";
-                      else if (/^.{0,3}$/.test(values.productName))
-                        errors.productName = "تو زندگیت سعی کن آدم باشی";
+              if (values.productImage.name === 'default.jpg')
+                errors.productImage = "هوووووووووووووووی";
 
-                      if (values.categoryId === "") {
-                        errors.categoryId = "سلکت بار نرفت تو چشت؟";
-                      }
+              if (!values.productName)
+                errors.productName = "چی میزنی؟";
+              else if (/^.{0,3}$/.test(values.productName))
+                errors.productName = "تو زندگیت سعی کن آدم باشی";
 
-                      if (!values.description)
-                        errors.description = "بنویس چند تا جمله دیگه";
-                      else if (/^.{0,20}$/.test(values.description))
-                        errors.description = "۲۰ تا کاراکتر بنویس انصافا";
+              if (values.categoryId === "") {
+                errors.categoryId = "سلکت بار نرفت تو چشت؟";
+              }
 
-                      return errors;
-                    }}
+              if (!values.description)
+                errors.description = "بنویس چند تا جمله دیگه";
+              else if (/^.{0,20}$/.test(values.description))
+                errors.description = "۲۰ تا کاراکتر بنویس انصافا";
+
+              return errors;
+            }}
 
                     onSubmit={(values, {setSubmitting}) => {
-              setTimeout(() => {
-                console.log(values);
-                const instance = new ApiClient("/api/login/getToken");
-                const resultCall = instance.loginPost(values) as Promise<ResultMessage>;
-                resultCall.then((result: ResultMessage) => {
-                }).catch((error: ResultMessage) => {
-                });
-                setSubmitting(false);
-              }, 400);
+                      setTimeout(() => {
+                        // console.log(values.productImage);
+                        // values.productImage = formik.values.productImage.prototype
+                        // console.log(values.productImage);
+                        // const instance = new ApiClient("/api/login/getToken");
+                        // const resultCall = instance.loginPost(values) as Promise<ResultMessage>;
+                        // resultCall.then((result: ResultMessage) => {
+                        // }).catch((error: ResultMessage) => {
+                        // });
+                        setSubmitting(false);
+                      }, 400);
 
-            }}>
+                    }}>
               {() => (
                 <Form>
                   <div className={"flex flex-col gap-6"}>
@@ -121,8 +122,8 @@ const AddProductModal = ({handleClose}) => {
                             رها کنید </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX 300KB)</p>
                         </div>
-                        <Field name="productImage">
-                          {({field}) => (
+                        <Field name="image">
+                          {({field}: TextareaFieldProps) => (
                             <input
                               {...field} id="dropzone-file" type="file" className="hidden" onChange={(event) => {
                               formik.setFieldValue("productImage", event.currentTarget.files?.[0]);
