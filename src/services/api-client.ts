@@ -46,6 +46,15 @@ class APIClient<T> {
       .get<T>(this.endPoint)
       .then(result => result.data)
   }
+
+  addProduct = (cookie: string, data: FormData) => {
+    const options = {
+      headers: {'Authorization': 'Bearer ' + cookie}
+    };
+    return axiosInstance
+      .post<T>(this.endPoint,data, options)
+      .then(result => result.data)
+  }
 }
 
 
