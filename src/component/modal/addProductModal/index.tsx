@@ -32,13 +32,15 @@ interface TextareaFieldProps {
 }
 
 interface Props {
-  handleClose: () => void
+  handleClose: () => void;
 }
 
-const AddProductModal = ({handleClose}:Props) => {
+const AddProductModal = ({handleClose}: Props) => {
   const [fetchData, setFetchData] = useState<SubCategoryName[]>([]);
   const [cookies, _setCookie] = useCookies(["token"]);
   const formikRef = useRef<FormikProps<ProductFormValue>>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
@@ -101,8 +103,9 @@ const AddProductModal = ({handleClose}:Props) => {
               else if (/^.{0,3}$/.test(values.productName))
                 errors.productName = "تو زندگیت سعی کن آدم باشی";
 
+              console.log(values.subCategoryId);
               if (values.subCategoryId === "") {
-                errors.categoryId = "سلکت بار نرفت تو چشت؟";
+                errors.subCategoryId = "سلکت بار نرفت تو چشت؟";
               }
 
               if (!values.description)
@@ -110,23 +113,24 @@ const AddProductModal = ({handleClose}:Props) => {
               else if (/^.{0,20}$/.test(values.description))
                 errors.description = "۲۰ تا کاراکتر بنویس انصافا";
 
+              console.log(errors);
               return errors;
             }}
 
                     onSubmit={(values, {setSubmitting}) => {
                       setTimeout(() => {
                         const form = new FormData();
-                        form.append("name", values.productName)
-                        form.append("description", values.description)
-                        form.append("image", values.productImage)
-                        form.append("subCategoryId", values.subCategoryId)
+                        form.append("name", values.productName);
+                        form.append("description", values.description);
+                        form.append("image", values.productImage);
+                        form.append("subCategoryId", values.subCategoryId);
                         const instance = new ApiClient("/product/add");
                         const resultCall = instance.addProduct(cookies.token, form) as Promise<ResultMessage>;
                         resultCall.then((_result: ResultMessage) => {
-                          formikRef.current!.resetForm()
-                          showSuccessfulToastMessage()
+                          formikRef.current!.resetForm();
+                          showSuccessfulToastMessage();
                         }).catch((_error: ResultMessage) => {
-                          showErrorToastMessage()
+                          showErrorToastMessage();
                         });
                         setSubmitting(false);
                       }, 400);
@@ -154,16 +158,22 @@ const AddProductModal = ({handleClose}:Props) => {
                             <input
                               {...field} id="dropzone-file" type="file" className="hidden" onChange={(event) => {
                               formik.setFieldValue("productImage", event.currentTarget.files?.[0]);
+                              const file = event.target.files![0];
+                              const imageUrl = URL.createObjectURL(file);
+                              setImagePreviewUrl(imageUrl);
                             }}/>
                           )}
                         </Field>
                       </label>
-                      <ErrorMessage name="productImage" component="div" className={"text-red-500 text-xs mt-2"}/>
+                      {imagePreviewUrl && (
+                        <img src={imagePreviewUrl} alt="Product image preview" className="w-full max-h-36 mt-2"/>
+                      )}
+                      <ErrorMessage name="productImage" component="div" className={"text-red-500 text-xs mt-1"}/>
                     </div>
                     <div>
                       <FormikInput variant={"addProduct"} icon={productName} type={"text"} name={"productName"}
                                    placeHolder={"نام کالا"}/>
-                      <ErrorMessage name="productName" component="div" className={"text-red-500 text-xs mt-2"}/>
+                      <ErrorMessage name="productName" component="div" className={"text-red-500 text-xs mt-1"}/>
                     </div>
                     <div>
                       <Field
@@ -181,7 +191,7 @@ const AddProductModal = ({handleClose}:Props) => {
                             ))
                         ]}
                       </Field>
-                      <ErrorMessage name="subCategoryId" component="div" className={"text-red-500 text-xs mt-2"}/>
+                      <ErrorMessage name="subCategoryId" component="div" className={"text-red-500 text-xs mt-1"}/>
                     </div>
                     <div>
                       <Field name="description">
