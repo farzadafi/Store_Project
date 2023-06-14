@@ -2,7 +2,7 @@ import {AddProductModal, Button, Input} from "@/component";
 import ApiClient from "@/services/api-client";
 import {FetchProduct, SubCategory} from "@/interfaces";
 import React, {useEffect, useRef, useState} from "react";
-import {BsPencilSquare} from "react-icons/bs";
+import {BsFillCheckCircleFill, BsFillXCircleFill, BsPencilSquare} from "react-icons/bs";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import {IoIosArrowDown, IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {BiSearchAlt} from "react-icons/bi";
@@ -17,6 +17,8 @@ const ManagerProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
     let totalProduct = 0;
+    const removeOptions = useRef<{[key: string]: boolean}>({});
+    const [shouldUpdate, setShouldUpdate] = useState(false);
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -151,11 +153,28 @@ const ManagerProducts = () => {
       setShowModal(false);
     };
 
+    function handleRemoveButtonClickOn(productId:string) {
+      removeOptions.current[productId] = true;
+      setShouldUpdate(!shouldUpdate);
+    }
+
+    function handleRemoveYesClick(productId:string) {
+      console.log(productId);
+      removeOptions.current[productId] = false;
+      setShouldUpdate(!shouldUpdate);
+    }
+
+    function handleRemoveButtonOff(productId:string) {
+      removeOptions.current[productId] = false;
+      setShouldUpdate(!shouldUpdate);
+    }
+
     return (
       <div className={"flex flex-col justify-center items-center"}>
         <div className={"flex gap-36 justify-evenly items-center p-4 w-full "}>
           <p className={"text-white whitespace-nowrap"}>مدیریت کالا ها</p>
-          <Button onClick={handleModalOpen} classes={"max-sm:h-8 whitespace-nowrap hover:bg-blue-500"} variant={"managerButton"}>افزودن
+          <Button onClick={handleModalOpen} classes={"max-sm:h-8 whitespace-nowrap hover:bg-blue-500"}
+                  variant={"managerButton"}>افزودن
             کالا</Button>
           {showModal && (
             <div onClick={handleModalClose} className="fixed inset-0 bg-black opacity-30 z-40"></div>
@@ -226,13 +245,26 @@ const ManagerProducts = () => {
                       </td>
                       <td className="whitespace-nowrap">{product.name}</td>
                       <td className="">{product.subCategoryName}</td>
-                      <td className="whitespace-nowrap py-4 text-sm flex">
+                      <td className="whitespace-nowrap py-4 text-sm flex gap-2">
                         <Button classes={"max-sm:p-1 hover:bg-blue-500"} variant={"edit"}>ویرایش
                           <BsPencilSquare/>
                         </Button>
-                        <Button classes={"max-sm:p-1 hover:bg-red-600"} variant={"remove"}>حذف
-                          <RiDeleteBin6Line/>
-                        </Button>
+                        {removeOptions.current[product.id] ? (
+                          <div className={'flex gap-1 flex-1 w-full'}>
+                            <Button onClick={() => handleRemoveYesClick(product.id)} variant={"remove"}>
+                              {
+                                <BsFillCheckCircleFill className={"w-5 h-5"}/>
+                              }
+                            </Button>
+                            <Button onClick={() => handleRemoveButtonOff(product.id)} classes={"bg-yellow-300"} variant={"remove"}>
+                              {
+                                <BsFillXCircleFill className={'w-5 h-5'}/>
+                              }
+                            </Button>
+                          </div>
+                        ) : (
+                          <Button onClick={() => handleRemoveButtonClickOn(product.id)} variant={"remove"}>حذف <RiDeleteBin6Line/></Button>
+                        )}
                       </td>
                     </tr>
                   )
