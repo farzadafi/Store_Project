@@ -85,7 +85,7 @@ const AddProductModal = ({handleClose}: Props) => {
           <div className="px-6 py-6 lg:px-8 flex flex-col gap-6">
             <div className={"flex justify-between"}>
               <h3>افزودن کالا</h3>
-              <Button onClick={handleClose} variant={""}>
+              <Button onClick={handleClose} classes={""} variant={""}>
                 {
                   closeIcon
                 }
@@ -103,8 +103,6 @@ const AddProductModal = ({handleClose}: Props) => {
                   extension = ext;
                 }
               }
-
-              console.log(values.productImage.size);
 
               if (values.productImage.size === 0)
                 errors.productImage = "هوووووووووووووووی";
@@ -219,11 +217,11 @@ const AddProductModal = ({handleClose}: Props) => {
                     </div>
                     <div className={"flex gap-2"}>
                       <div className={"w-[20rem]"}>
-                        <Button onClick={handleClose} type={"button"} classes={"bg-red-500 w-full flex justify-center"}
+                        <Button onClick={handleClose} type={"button"} classes={"bg-red-500 w-full flex justify-center hover:bg-red-600"}
                                 variant={"common"}>لغو</Button>
                       </div>
                       <div className={"w-[20rem]"}>
-                        <Button type={"submit"} classes={"bg-blue-500 w-full flex justify-center"}
+                        <Button type={"submit"} classes={"bg-blue-500 w-full flex justify-center hover:bg-blue-600"}
                                 variant={"common"}>ذخیره</Button>
                       </div>
                     </div>
