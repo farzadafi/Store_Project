@@ -95,15 +95,29 @@ const AddProductModal = ({handleClose}: Props) => {
               const errors: ProductSaveError = {};
               values.productImage = formik.values.productImage;
 
+              const legalExtension = ["jpg", "jpeg", "png", "svg", "gif"];
+              let extension: string | undefined = "";
+              if (values.productImage.size !== 0) {
+                const ext = values.productImage.name.split(".").pop();
+                if (ext !== undefined) {
+                  extension = ext;
+                }
+              }
+
+              console.log(values.productImage.size);
+
               if (values.productImage.size === 0)
                 errors.productImage = "هوووووووووووووووی";
+              else if (!legalExtension.includes(extension))
+                errors.productImage = ` کوری چیزی هستی؟ عکس تو فرمت ${extension}`;
+              else if (values.productImage.size > 307200)
+                errors.productImage = "عکست فول اچ دی نباشه،‌نمیشه نه ؟ :|";
 
               if (!values.productName)
                 errors.productName = "چی میزنی؟";
               else if (/^.{0,3}$/.test(values.productName))
                 errors.productName = "تو زندگیت سعی کن آدم باشی";
 
-              console.log(values.subCategoryId);
               if (values.subCategoryId === "") {
                 errors.subCategoryId = "سلکت بار نرفت تو چشت؟";
               }
@@ -113,7 +127,6 @@ const AddProductModal = ({handleClose}: Props) => {
               else if (/^.{0,20}$/.test(values.description))
                 errors.description = "۲۰ تا کاراکتر بنویس انصافا";
 
-              console.log(errors);
               return errors;
             }}
 
