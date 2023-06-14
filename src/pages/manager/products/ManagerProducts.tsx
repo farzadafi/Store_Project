@@ -154,8 +154,8 @@ const ManagerProducts = () => {
     return (
       <div className={"flex flex-col justify-center items-center"}>
         <div className={"flex gap-36 justify-evenly items-center p-4 w-full "}>
-          <p className={"text-white whitespace-nowrap"}>مدریریت کالا ها</p>
-          <Button onClick={handleModalOpen} classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>افزودن
+          <p className={"text-white whitespace-nowrap"}>مدیریت کالا ها</p>
+          <Button onClick={handleModalOpen} classes={"max-sm:h-8 whitespace-nowrap hover:bg-blue-500"} variant={"managerButton"}>افزودن
             کالا</Button>
           {showModal && (
             <div onClick={handleModalClose} className="fixed inset-0 bg-black opacity-30 z-40"></div>
@@ -178,7 +178,7 @@ const ManagerProducts = () => {
                 <th className={"py-3 sm:text-center max-sm:text-right max-sm:p-3"}>
                   <div className={"relative"} ref={handleDropdownRef}>
                     <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio"
-                            className="text-gray-500 bg-white hover:bg-gray-100 rounded-lg text-sm px-3 py-1.5 "
+                            className="text-gray-500 bg-white hover:bg-gray-200 rounded-lg text-sm px-3 py-1.5 "
                             type="button" onClick={toggleDropdown}>
                       <p className={"inline-block"}>دسته بندی ها</p>
                       <IoIosArrowDown className={"inline-block mr-2"}/>
@@ -227,10 +227,10 @@ const ManagerProducts = () => {
                       <td className="whitespace-nowrap">{product.name}</td>
                       <td className="">{product.subCategoryName}</td>
                       <td className="whitespace-nowrap py-4 text-sm flex">
-                        <Button classes={"max-sm:p-1"} variant={"edit"}>ویرایش
+                        <Button classes={"max-sm:p-1 hover:bg-blue-500"} variant={"edit"}>ویرایش
                           <BsPencilSquare/>
                         </Button>
-                        <Button classes={"max-sm:p-1"} variant={"remove"}>حذف
+                        <Button classes={"max-sm:p-1 hover:bg-red-600"} variant={"remove"}>حذف
                           <RiDeleteBin6Line/>
                         </Button>
                       </td>
