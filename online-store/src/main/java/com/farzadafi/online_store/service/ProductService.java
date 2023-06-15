@@ -40,4 +40,18 @@ public record ProductService(SubCategoryService subCategoryService,
                 .switchIfEmpty(Mono.error(new NotFoundException("No product found")));
         return allProduct.collectList().block();
     }
+
+    public Product findById(String id) {
+        Mono<Product> productFound = productRepository.findById(id)
+                .switchIfEmpty(Mono.error(new NotFoundException("No Product found")));
+        return productFound.block();
+    }
+
+    public void removeProduct(String id) {
+        Product product = findById(id);
+        SubCategory subCategory = subCategoryService.findById(product.getSubCategoryId());
+        subCategory.removeProduct(product);
+        subCategoryService.updateSubCategory(subCategory);
+        productRepository.delete(product).subscribe();
+    }
 }
