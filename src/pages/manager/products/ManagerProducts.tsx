@@ -7,6 +7,7 @@ import {RiDeleteBin6Line} from "react-icons/ri";
 import {IoIosArrowDown, IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {BiSearchAlt} from "react-icons/bi";
 import {toast} from "react-toastify";
+import {useCookies} from "react-cookie";
 
 const ManagerProducts = () => {
     const searchIcon = <BiSearchAlt className={"text-gray-500 w-4 h-4"}/>;
@@ -19,7 +20,7 @@ const ManagerProducts = () => {
     let totalProduct = 0;
     const removeOptions = useRef<{[key: string]: boolean}>({});
     const [shouldUpdate, setShouldUpdate] = useState(false);
-
+    const [cookies, _setCookie] = useCookies(["token"]);
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -158,8 +159,29 @@ const ManagerProducts = () => {
       setShouldUpdate(!shouldUpdate);
     }
 
+  const showSuccessfulToastMessage = () => {
+    toast.success("خوبت شد؟ پاکش کردی :(", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+
+  const showErrorToastMessage = () => {
+    toast.error("بعضی وقتا نمیشه اون چیزی که باید بشه :|", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+
     function handleRemoveYesClick(productId:string) {
-      console.log(productId);
+      try {
+        const instance = new ApiClient("/product/delete");
+        const result = instance.deleteProduct(cookies.token, productId)
+        console.log(result);
+        showSuccessfulToastMessage()
+      } catch (error) {
+        showErrorToastMessage()
+      }
       removeOptions.current[productId] = false;
       setShouldUpdate(!shouldUpdate);
     }
