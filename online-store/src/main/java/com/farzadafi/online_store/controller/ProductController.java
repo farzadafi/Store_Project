@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(methods = RequestMethod.POST, allowCredentials = "true", allowedHeaders = "*", originPatterns = "*", origins = "allowedOriginPatterns")
 public class ProductController {
 
     private final ProductService productService;
@@ -24,7 +25,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @CrossOrigin(methods = RequestMethod.POST, allowCredentials = "true", allowedHeaders = "*", originPatterns = "*", origins = "allowedOriginPatterns")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ReturnMessage> save(@ModelAttribute("productDto") @RequestBody ProductDto productDto) {
@@ -45,5 +45,11 @@ public class ProductController {
         List<Product> allBySubCategoryId = productService.findAllProduct();
         assert allBySubCategoryId != null;
         return ProductMapper.modelsToDtos(allBySubCategoryId);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("delete")
+    public void deleteProduct(@RequestParam String id) {
+        productService.removeProduct(id);
     }
 }
