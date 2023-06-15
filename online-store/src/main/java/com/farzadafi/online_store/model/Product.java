@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Builder
 @Document
+@EqualsAndHashCode
 public class Product {
     @Id
     @GeneratedValue
