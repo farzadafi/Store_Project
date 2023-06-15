@@ -27,4 +27,8 @@ public class SubCategory {
     public void addProduct(Product product) {
         this.subCategories.add(product);
     }
+
+    public void removeProduct(Product product) {
+        this.subCategories.remove(product);
+    }
 }
