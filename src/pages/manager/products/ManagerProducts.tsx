@@ -132,7 +132,7 @@ const ManagerProducts = () => {
         }
       };
       fetchSubCategories();
-    }, []);
+    }, fetchData);
 
     if (loading) {
       return (
