@@ -3,6 +3,7 @@ package com.farzadafi.online_store.controller;
 import com.farzadafi.online_store.dto.ProductDto;
 import com.farzadafi.online_store.dto.ProductDtoResponse;
 import com.farzadafi.online_store.dto.ReturnMessage;
+import com.farzadafi.online_store.dto.UpdateProductDto;
 import com.farzadafi.online_store.mapper.ProductMapper;
 import com.farzadafi.online_store.model.Product;
 import com.farzadafi.online_store.service.ProductService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -51,5 +53,11 @@ public class ProductController {
     @DeleteMapping("delete")
     public void deleteProduct(@RequestParam String id) {
         productService.removeProduct(id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update")
+    public void update(@RequestBody ArrayList<UpdateProductDto> updateProductDtos) {
+        productService.update(updateProductDtos);
     }
 }
