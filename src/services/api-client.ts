@@ -1,5 +1,5 @@
 import axios from "axios";
-import {LoginFormValue} from "@/interfaces";
+import {LoginFormValue, NewPriceArrayUpdate} from "@/interfaces";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080",
@@ -63,6 +63,15 @@ class APIClient<T> {
     };
     return axiosInstance
       .delete<T>(`${this.endPoint}?id=${id}`, options)
+      .then(result => result.data);
+  };
+
+  updateProducts = (cookie: string, data: NewPriceArrayUpdate[]) => {
+    const options = {
+      headers: {"Authorization": "Bearer " + cookie}
+    };
+    return axiosInstance
+      .put<T>(this.endPoint, data, options)
       .then(result => result.data);
   };
 }
