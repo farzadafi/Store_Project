@@ -1,15 +1,10 @@
 import {SetStateAction, useEffect, useState} from "react";
-import {FetchInventoryProduct} from "@/interfaces";
+import {FetchInventoryProduct, NewPriceArrayUpdate} from "@/interfaces";
 import ApiClient from "@/services/api-client";
 import {Button, EditablePrice, EditableQuantity} from "@/component";
 import {toast} from "react-toastify";
 import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
-
-interface NewPriceArrayUpdate {
-  id: string,
-  price?: number,
-  quantity?: number
-}
+import {useCookies} from "react-cookie";
 
 const InventoryAndPrices = () => {
   const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
@@ -19,11 +14,26 @@ const InventoryAndPrices = () => {
   let totalProduct = 0;
   const [newPriceArray, setNewPriceArray] = useState<NewPriceArrayUpdate[]>([]);
   const [isShowCancelButton, setShowCancelButton] = useState(false);
+  const [cookies, _setCookie] = useCookies(["token"]);
+
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
 
   const showWarningToastMessage = () => {
     toast.warning("تو صفحه لاگین بهت گفتم یه چیزی میزنی :|", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+  const showSuccessfulToastMessage = () => {
+    toast.success("شیرینی آپدیت یادت نره :)", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+
+  const showErrorToastMessage = () => {
+    toast.error("بعضی وقتا نمیشه اون چیزی که باید بشه :|", {
       position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
@@ -90,7 +100,7 @@ const InventoryAndPrices = () => {
   };
 
   const onSaveHandler = () => {
-    const result = Object.values(newPriceArray.reduce((acc: {[key: string]: NewPriceArrayUpdate}, curr: NewPriceArrayUpdate) => {      const id = curr.id;
+    const resultArrayAfterCombine = Object.values(newPriceArray.reduce((acc: {[key: string]: NewPriceArrayUpdate}, curr: NewPriceArrayUpdate) => {      const id = curr.id;
       if (!acc[id]) {
         acc[id] = { id };
       }
@@ -98,7 +108,18 @@ const InventoryAndPrices = () => {
       return acc;
     }, {}));
 
-    console.log(result);
+    const  updateProduct = async () => {
+      try {
+        const instance = new ApiClient("/product/update");
+        await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
+          console.log(r);
+          showSuccessfulToastMessage();
+        })
+      } catch (error) {
+        showErrorToastMessage()
+      }
+    };
+    updateProduct()
   };
 
   const cancelEditButton = () => {
