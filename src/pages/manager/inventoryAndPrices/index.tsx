@@ -1,16 +1,24 @@
-import {useEffect, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 import {FetchInventoryProduct} from "@/interfaces";
 import ApiClient from "@/services/api-client";
-import {Button} from "@/component";
-import {BsPencilSquare} from "react-icons/bs";
+import {Button, EditablePrice, EditableQuantity} from "@/component";
 import {toast} from "react-toastify";
 import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 
+interface NewPriceArrayUpdate {
+  id: string,
+  price?: number,
+  quantity?: number
+}
+
 const InventoryAndPrices = () => {
   const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
+  const [sourceOfTruth, setSourceOfTruth] = useState<FetchInventoryProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   let totalProduct = 0;
+  const [newPriceArray, setNewPriceArray] = useState<NewPriceArrayUpdate[]>([]);
+  const [isShowCancelButton, setShowCancelButton] = useState(false);
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
 
@@ -22,7 +30,7 @@ const InventoryAndPrices = () => {
   };
 
   const forwardButtonHandle = () => {
-    if ( (totalProduct < 10) || currentPage * 10 - 10 + 3 > totalProduct) {
+    if ((totalProduct < 10) || currentPage * 10 - 10 + 3 > totalProduct) {
       showWarningToastMessage();
     } else
       setCurrentPage(currentPage + 1);
@@ -34,6 +42,61 @@ const InventoryAndPrices = () => {
     else
       setCurrentPage(currentPage - 1);
   };
+
+  const handleSavePrice = (id: string, price: number, quantity: number): void => {
+
+    let updatedFetchData: SetStateAction<FetchInventoryProduct[]> = [];
+    if ((price === -1) && (quantity !== -1)) {
+      setNewPriceArray([
+        ...newPriceArray, {
+          id,
+          quantity
+        }
+      ]);
+
+      updatedFetchData = fetchData.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            quantity,
+            isQuantityEdited: true
+          };
+        }
+        return item;
+      });
+    } else if ((price !== -1) && (quantity === -1)) {
+      setNewPriceArray([
+        ...newPriceArray, {
+          id,
+          price
+        }
+      ]);
+
+      updatedFetchData = fetchData.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            price,
+            isPriceEdited: true,
+          };
+        }
+        return item;
+      });
+    }
+
+    setFetchData(updatedFetchData);
+    if(!isShowCancelButton)
+      setShowCancelButton(true);
+  };
+
+  const onSaveHandler = () => {
+    console.log(newPriceArray);
+  };
+
+  const cancelEditButton = () => {
+    setFetchData(sourceOfTruth);
+    setShowCancelButton(false)
+  }
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -47,9 +110,12 @@ const InventoryAndPrices = () => {
             price: product.price,
             quantity: product.quantity,
             subCategoryName: subCategory.name,
+            isPriceEdited: false,
+            isQuantityEdited: false
           }));
         });
         setFetchData(formattedResult);
+        setSourceOfTruth(formattedResult);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -73,11 +139,20 @@ const InventoryAndPrices = () => {
     <div className={"flex flex-col justify-center items-center"}>
       <div className={"flex gap-36 justify-evenly items-center p-4 w-full max-sm:gap-24"}>
         <p className={"text-white whitespace-nowrap"}>مدیریت موجودی و قیمت ها</p>
-        <Button classes={"max-sm:h-8 whitespace-nowrap"} variant={"managerButton"}>ذخیره</Button>
+        <div className={"flex gap-2"}>
+          {
+            isShowCancelButton ?
+              <Button onClick={cancelEditButton} classes={"max-sm:h-8 whitespace-nowrap"}
+                      variant={"remove"}>لغو</Button> : null
+          }
+          <Button onClick={onSaveHandler} classes={"max-sm:h-8 whitespace-nowrap"}
+                  variant={"managerButton"}>ذخیره</Button>
+        </div>
       </div>
 
       <div className={"max-w-4xl mt-10 max-sm:w-72 "}>
-        <div className="relative overflow-y-auto h-[30rem] max-sm:h-[25rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
+        <div
+          className="relative overflow-y-auto h-[30rem] max-sm:h-[25rem] overflow-hidden rounded-xl border max-sm:overflow-x-auto">
           <table className="w-full max-sm:w-[40rem] text-sm text-white dark:text-gray-400 table-fixed">
             <thead className="text-xs text-white uppercase dark:bg-gray-700 dark:text-gray-400 border-b">
             <tr>
@@ -105,16 +180,31 @@ const InventoryAndPrices = () => {
                       </p>
                     </td>
                     <td className="max-sm:pr-2 p-2">
-                      <p className={"flex justify-center gap-2 bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>
-                        <BsPencilSquare/>
-                        {product.price}
-                      </p>
+                      {/*<p className={"flex justify-center gap-2 bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>*/}
+                      {/*  <BsPencilSquare/>*/}
+                      {/*  {product.price}*/}
+                      {/*</p>*/}
+                      {
+                        product.isPriceEdited ?
+                          <EditablePrice classes={"bg-yellow-500"} price={product.price}
+                                         onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/> :
+                          <EditablePrice price={product.price}
+                                         onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/>
+                      }
+                      {/*<EditablePrice classes={"bg-red-500"} price={product.price} onSave={(newPrice) => handleSavePrice(product.id, newPrice)}/>*/}
                     </td>
                     <td className="max-sm:pr-2 p-2">
-                      <p className={"flex justify-center gap-4 bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>
-                        <BsPencilSquare/>
-                        {product.quantity}
-                      </p>
+                      {/*<p className={"flex justify-center gap-4 bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>*/}
+                      {/*  <BsPencilSquare/>*/}
+                      {/*  {product.quantity}*/}
+                      {/*</p>*/}
+                      {
+                        product.isQuantityEdited ?
+                          <EditableQuantity classes={"bg-yellow-500"} quantity={product.quantity}
+                                            onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/> :
+                          <EditableQuantity quantity={product.quantity}
+                                            onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/>
+                      }
                     </td>
                   </tr>
                 )
