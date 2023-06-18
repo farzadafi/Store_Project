@@ -1,5 +1,6 @@
 package com.farzadafi.online_store.service;
 
+import com.farzadafi.online_store.dto.UpdateProductDto;
 import com.farzadafi.online_store.exception.DuplicateException;
 import com.farzadafi.online_store.exception.NotFoundException;
 import com.farzadafi.online_store.model.Product;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -53,5 +56,49 @@ public record ProductService(SubCategoryService subCategoryService,
         subCategory.removeProduct(product);
         subCategoryService.updateSubCategory(subCategory);
         productRepository.delete(product).subscribe();
+    }
+
+    public void update(ArrayList<UpdateProductDto> updateProductDtos) {
+        List<Product> products = getProducts(updateProductDtos);
+        updateInProducts(updateProductDtos, products);
+        updateInSubCategory(products);
+    }
+
+    private List<Product> getProducts(ArrayList<UpdateProductDto> updateProductDtos) {
+        List<Product> products = new ArrayList<>();
+        updateProductDtos.forEach(p -> {
+            Product product = findById(p.id());
+            products.add(product);
+        });
+        return products;
+    }
+
+    private void updateInProducts(ArrayList<UpdateProductDto> updateProductDtos, List<Product> products) {
+        products.forEach(p -> {
+            UpdateProductDto updateProduct = updateProductDtos.
+                    stream()
+                    .filter(updateProductDto ->
+                            p.getId().equals(updateProductDto.id())).findFirst().get();
+
+            p.setPrice(updateProduct.price() != null ? updateProduct.price() : p.getPrice());
+            p.setQuantity(updateProduct.quantity() != null ? updateProduct.quantity() : p.getQuantity());
+            productRepository.save(p).subscribe();
+        });
+    }
+
+    private void updateInSubCategory(List<Product> products) {
+        List<SubCategory> allSubCategory = subCategoryService.findAllSubCategory();
+        for (SubCategory subCategory : allSubCategory) {
+            for (Product product : subCategory.getSubCategories()) {
+                Optional<Product> matchingProduct = products.stream()
+                        .filter(p -> p.getId().equals(product.getId()))
+                        .findFirst();
+                if (matchingProduct.isPresent()) {
+                    product.setPrice(matchingProduct.get().getPrice());
+                    product.setQuantity(matchingProduct.get().getQuantity());
+                }
+                subCategoryService.updateSubCategory(subCategory);
+            }
+        }
     }
 }
