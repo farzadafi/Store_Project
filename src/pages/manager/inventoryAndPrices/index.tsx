@@ -90,12 +90,21 @@ const InventoryAndPrices = () => {
   };
 
   const onSaveHandler = () => {
-    console.log(newPriceArray);
+    const result = Object.values(newPriceArray.reduce((acc: {[key: string]: NewPriceArrayUpdate}, curr: NewPriceArrayUpdate) => {      const id = curr.id;
+      if (!acc[id]) {
+        acc[id] = { id };
+      }
+      Object.assign(acc[id], curr);
+      return acc;
+    }, {}));
+
+    console.log(result);
   };
 
   const cancelEditButton = () => {
     setFetchData(sourceOfTruth);
     setShowCancelButton(false)
+    setNewPriceArray([])
   }
 
   useEffect(() => {
