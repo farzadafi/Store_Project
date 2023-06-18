@@ -95,38 +95,39 @@ const InventoryAndPrices = () => {
     }
 
     setFetchData(updatedFetchData);
-    if(!isShowCancelButton)
+    if (!isShowCancelButton)
       setShowCancelButton(true);
   };
 
   const onSaveHandler = () => {
-    const resultArrayAfterCombine = Object.values(newPriceArray.reduce((acc: {[key: string]: NewPriceArrayUpdate}, curr: NewPriceArrayUpdate) => {      const id = curr.id;
+    const resultArrayAfterCombine = Object.values(newPriceArray.reduce((acc: { [key: string]: NewPriceArrayUpdate }, curr: NewPriceArrayUpdate) => {
+      const id = curr.id;
       if (!acc[id]) {
-        acc[id] = { id };
+        acc[id] = {id};
       }
       Object.assign(acc[id], curr);
       return acc;
     }, {}));
 
-    const  updateProduct = async () => {
+    const updateProduct = async () => {
       try {
         const instance = new ApiClient("/product/update");
         await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
           console.log(r);
           showSuccessfulToastMessage();
-        })
+        });
       } catch (error) {
-        showErrorToastMessage()
+        showErrorToastMessage();
       }
     };
-    updateProduct()
+    updateProduct();
   };
 
   const cancelEditButton = () => {
     setFetchData(sourceOfTruth);
-    setShowCancelButton(false)
-    setNewPriceArray([])
-  }
+    setShowCancelButton(false);
+    setNewPriceArray([]);
+  };
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -209,33 +210,20 @@ const InventoryAndPrices = () => {
                         {product.name}
                       </p>
                     </td>
-                    <td className="max-sm:pr-2 p-2">
-                      {/*<p className={"flex justify-center gap-2 bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>*/}
-                      {/*  <BsPencilSquare/>*/}
-                      {/*  {product.price}*/}
-                      {/*</p>*/}
-                      {
-                        product.isPriceEdited ?
-                          <EditablePrice classes={"bg-yellow-500"} price={product.price}
-                                         onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/> :
-                          <EditablePrice price={product.price}
-                                         onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/>
-                      }
-                      {/*<EditablePrice classes={"bg-red-500"} price={product.price} onSave={(newPrice) => handleSavePrice(product.id, newPrice)}/>*/}
-                    </td>
-                    <td className="max-sm:pr-2 p-2">
-                      {/*<p className={"flex justify-center gap-4 bg-[#5b1076] min-w-max inline-block p-2 rounded-lg"}>*/}
-                      {/*  <BsPencilSquare/>*/}
-                      {/*  {product.quantity}*/}
-                      {/*</p>*/}
-                      {
+                    {
+                      product.isPriceEdited ?
+                        <EditablePrice classes={"bg-yellow-500"} price={product.price}
+                                       onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/> :
+                        <EditablePrice price={product.price}
+                                       onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/>
+                    }
+                    {
                         product.isQuantityEdited ?
                           <EditableQuantity classes={"bg-yellow-500"} quantity={product.quantity}
                                             onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/> :
                           <EditableQuantity quantity={product.quantity}
                                             onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/>
                       }
-                    </td>
                   </tr>
                 )
               )}
