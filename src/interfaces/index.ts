@@ -59,6 +59,8 @@ export interface FetchInventoryProduct {
   subCategoryName: string,
   price: number,
   quantity: number
+  isPriceEdited?: boolean
+  isQuantityEdited?: boolean
 }
 
 export interface Orders {
