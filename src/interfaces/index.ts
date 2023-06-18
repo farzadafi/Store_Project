@@ -86,3 +86,9 @@ export interface SubCategoryName {
   id: string,
   name: string
 }
+
+export interface NewPriceArrayUpdate {
+  id: string,
+  price?: number,
+  quantity?: number
+}
