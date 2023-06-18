@@ -1,6 +1,6 @@
 package com.farzadafi.online_store.dto;
 
 public record UpdateProductDto(String id,
-                               Long Price,
+                               Long price,
                                Integer quantity) {
 }
