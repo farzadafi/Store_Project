@@ -29,7 +29,7 @@ const LoginPage = () => {
   }
 
   const showSuccessfulToastMessage = () => {
-    toast.success("خان اول رو تونستی رد کنی بدبخت", {
+    toast.success("خداوکیل خراب کاری نکنی", {
       position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
