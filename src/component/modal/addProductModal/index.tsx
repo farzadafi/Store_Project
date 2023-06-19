@@ -42,7 +42,7 @@ const AddProductModal = ({handleClose}: Props) => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
   useEffect(() => {
-    const fetchSubCategories = async () => {
+    (async () => {
       try {
         const instance = new ApiClient("/sub-category/find-all-name");
         const result = await instance.getAllSubCategory() as SubCategoryName[];
@@ -50,8 +50,7 @@ const AddProductModal = ({handleClose}: Props) => {
       } catch (error) {
         console.error(error);
       }
-    };
-    fetchSubCategories();
+    })();
   }, []);
 
   const formik = useFormik({
