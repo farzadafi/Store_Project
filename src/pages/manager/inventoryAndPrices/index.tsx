@@ -130,7 +130,7 @@ const InventoryAndPrices = () => {
   };
 
   useEffect(() => {
-    const fetchSubCategories = async () => {
+    (async () => {
       try {
         const instance = new ApiClient("/sub-category/find-all");
         const result = await instance.getAllProduct() as Promise<FetchInventoryProduct>[];
@@ -151,8 +151,7 @@ const InventoryAndPrices = () => {
       } catch (error) {
         console.error(error);
       }
-    };
-    fetchSubCategories();
+    })();
   }, []);
 
   if (loading) {
@@ -218,12 +217,12 @@ const InventoryAndPrices = () => {
                                        onSave={(newPrice) => handleSavePrice(product.id, newPrice, -1)}/>
                     }
                     {
-                        product.isQuantityEdited ?
-                          <EditableQuantity classes={"bg-yellow-500"} quantity={product.quantity}
-                                            onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/> :
-                          <EditableQuantity quantity={product.quantity}
-                                            onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/>
-                      }
+                      product.isQuantityEdited ?
+                        <EditableQuantity classes={"bg-yellow-500"} quantity={product.quantity}
+                                          onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/> :
+                        <EditableQuantity quantity={product.quantity}
+                                          onSave={(newQuantity) => handleSavePrice(product.id, -1, newQuantity)}/>
+                    }
                   </tr>
                 )
               )}
