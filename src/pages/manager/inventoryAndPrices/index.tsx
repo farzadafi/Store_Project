@@ -24,6 +24,7 @@ const InventoryAndPrices = () => {
       className: "toast-message"
     });
   };
+
   const showSuccessfulToastMessage = () => {
     toast.success("شیرینی آپدیت یادت نره :)", {
       position: toast.POSITION.TOP_CENTER,
@@ -105,39 +106,13 @@ const InventoryAndPrices = () => {
       setShowCancelButton(true);
   };
 
-  const onSaveHandler = () => {
-    const resultArrayAfterCombine = Object.values(newPriceArray.reduce((acc: { [key: string]: NewPriceArrayUpdate }, curr: NewPriceArrayUpdate) => {
-      const id = curr.id;
-      if (!acc[id]) {
-        acc[id] = {id};
-      }
-      Object.assign(acc[id], curr);
-      return acc;
-    }, {}));
-
-    if(resultArrayAfterCombine.length > 0 ) {
-      (async () => {
-        try {
-          const instance = new ApiClient("/product/update");
-          await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
-            console.log(r);
-            showSuccessfulToastMessage();
-          });
-        } catch (error) {
-          showErrorToastMessage();
-        }
-      })();
-    }else
-      showPoetToastMessage()
-  };
-
   const cancelEditButton = () => {
     setFetchData(sourceOfTruth);
     setShowCancelButton(false);
     setNewPriceArray([]);
   };
 
-  const { data: allProductData, isLoading, isError } = useQuery('inventoryProducts', async () => {
+  const { data: allProductData, isLoading, isError, refetch } = useQuery('inventoryProducts', async () => {
     const instance = new ApiClient('/sub-category/find-all');
     const result = await instance.getAllProduct() as Promise<FetchInventoryProduct>[];
     const formattedResult = result.flatMap((subCategory: any) => {
@@ -169,6 +144,35 @@ const InventoryAndPrices = () => {
   } else {
     totalProduct = allProductData!.length;
   }
+
+  const onSaveHandler = () => {
+    const resultArrayAfterCombine = Object.values(newPriceArray.reduce((acc: { [key: string]: NewPriceArrayUpdate }, curr: NewPriceArrayUpdate) => {
+      const id = curr.id;
+      if (!acc[id]) {
+        acc[id] = {id};
+      }
+      Object.assign(acc[id], curr);
+      return acc;
+    }, {}));
+
+    if(resultArrayAfterCombine.length > 0 ) {
+      (async () => {
+        try {
+          const instance = new ApiClient("/product/update");
+          await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
+            refetch();
+            console.log(r);
+            showSuccessfulToastMessage();
+            setNewPriceArray([]);
+            setShowCancelButton(false)
+          });
+        } catch (error) {
+          showErrorToastMessage();
+        }
+      })();
+    }else
+      showPoetToastMessage()
+  };
 
   return (
     <div className={"flex flex-col justify-center items-center"}>
