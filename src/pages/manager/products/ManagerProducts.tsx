@@ -112,7 +112,7 @@ const ManagerProducts = () => {
 
 
     useEffect(() => {
-      const fetchSubCategories = async () => {
+      (async () => {
         try {
           const instance = new ApiClient("/sub-category/find-all");
           const result = await instance.getAllProduct() as Promise<SubCategory>[];
@@ -130,8 +130,7 @@ const ManagerProducts = () => {
         } catch (error) {
           console.error(error);
         }
-      };
-      fetchSubCategories();
+      })();
     }, fetchData);
 
     if (loading) {
