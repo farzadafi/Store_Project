@@ -109,7 +109,7 @@ const InventoryAndPrices = () => {
       return acc;
     }, {}));
 
-    const updateProduct = async () => {
+    (async () => {
       try {
         const instance = new ApiClient("/product/update");
         await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
@@ -119,8 +119,7 @@ const InventoryAndPrices = () => {
       } catch (error) {
         showErrorToastMessage();
       }
-    };
-    updateProduct();
+    })();
   };
 
   const cancelEditButton = () => {
