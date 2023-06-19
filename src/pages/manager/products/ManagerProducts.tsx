@@ -24,7 +24,7 @@ const ManagerProducts = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setInputValue(event.target.value);
       event.persist();
       // @ts-ignore
@@ -131,7 +131,7 @@ const ManagerProducts = () => {
           console.error(error);
         }
       })();
-    }, fetchData);
+    }, []);
 
     if (loading) {
       return (
