@@ -1,15 +1,15 @@
-import {SetStateAction, useEffect, useState} from "react";
+import {SetStateAction, useState} from "react";
 import {FetchInventoryProduct, NewPriceArrayUpdate} from "@/interfaces";
 import ApiClient from "@/services/api-client";
 import {Button, EditablePrice, EditableQuantity} from "@/component";
 import {toast} from "react-toastify";
 import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {useCookies} from "react-cookie";
+import {useQuery} from "react-query";
 
 const InventoryAndPrices = () => {
   const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
   const [sourceOfTruth, setSourceOfTruth] = useState<FetchInventoryProduct[]>([]);
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   let totalProduct = 0;
   const [newPriceArray, setNewPriceArray] = useState<NewPriceArrayUpdate[]>([]);
@@ -137,40 +137,37 @@ const InventoryAndPrices = () => {
     setNewPriceArray([]);
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const instance = new ApiClient("/sub-category/find-all");
-        const result = await instance.getAllProduct() as Promise<FetchInventoryProduct>[];
-        const formattedResult = result.flatMap((subCategory: any) => {
-          return subCategory.subCategories.map((product: { id: string; name: string; price: number; quantity: number }) => ({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            quantity: product.quantity,
-            subCategoryName: subCategory.name,
-            isPriceEdited: false,
-            isQuantityEdited: false
-          }));
-        });
-        setFetchData(formattedResult);
-        setSourceOfTruth(formattedResult);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, []);
+  const { data: allProductData, isLoading, isError } = useQuery('inventoryProducts', async () => {
+    const instance = new ApiClient('/sub-category/find-all');
+    const result = await instance.getAllProduct() as Promise<FetchInventoryProduct>[];
+    const formattedResult = result.flatMap((subCategory: any) => {
+      return subCategory.subCategories.map((product: { id: string; name: string; price: number; quantity: number }) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        subCategoryName: subCategory.name,
+        isPriceEdited: false,
+        isQuantityEdited: false
+      }));
+    });
+    setFetchData(formattedResult);
+    setSourceOfTruth(formattedResult);
 
-  if (loading) {
+    return formattedResult;
+  });
+
+  if (isLoading) {
     return (
       <div className="spinner-container">
         <div className="spinner"></div>
         <div>یه دقویی وابس...</div>
       </div>
     );
+  } else if (isError) {
+    return <div>Error loading inventory products</div>;
   } else {
-    totalProduct = fetchData.length;
+    totalProduct = allProductData!.length;
   }
 
   return (
