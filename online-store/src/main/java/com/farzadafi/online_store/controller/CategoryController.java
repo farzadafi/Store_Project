@@ -5,12 +5,15 @@ import com.farzadafi.online_store.dto.ReturnMessage;
 import com.farzadafi.online_store.mapper.CategoryMapper;
 import com.farzadafi.online_store.model.Category;
 import com.farzadafi.online_store.service.CategoryService;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @RestController
@@ -18,9 +21,12 @@ import java.util.UUID;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final MessageSource messageSource;
 
-    public CategoryController(CategoryService categoryService) {
+
+    public CategoryController(CategoryService categoryService, MessageSource messageSource) {
         this.categoryService = categoryService;
+        this.messageSource = messageSource;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -41,5 +47,11 @@ public class CategoryController {
     public List<CategoryDto> findAll() {
         List<Category> categoryList = categoryService.findAllCategory();
         return CategoryMapper.INSTANCE.modelsToDtos(categoryList);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        Locale locale = LocaleContextHolder.getLocale();
+        return messageSource.getMessage("error.unauthorized.message", null, locale);
     }
 }
