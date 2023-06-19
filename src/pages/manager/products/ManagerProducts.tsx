@@ -1,18 +1,19 @@
 import {AddProductModal, Button, Input} from "@/component";
 import ApiClient from "@/services/api-client";
 import {FetchProduct, SubCategory} from "@/interfaces";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {BsFillCheckCircleFill, BsFillXCircleFill, BsPencilSquare} from "react-icons/bs";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import {IoIosArrowDown, IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {BiSearchAlt} from "react-icons/bi";
 import {toast} from "react-toastify";
 import {useCookies} from "react-cookie";
+import {useQuery} from "react-query";
 
 const ManagerProducts = () => {
     const searchIcon = <BiSearchAlt className={"text-gray-500 w-4 h-4"}/>;
     const [fetchData, setFetchData] = useState<FetchProduct[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [_loading, setLoading] = useState(true);
     const [sourceOfTruth, setSourceOfTruth] = useState<FetchProduct[]>([]);
     const [inputValue, setInputValue] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -111,38 +112,34 @@ const ManagerProducts = () => {
     };
 
 
-    useEffect(() => {
-      (async () => {
-        try {
-          const instance = new ApiClient("/sub-category/find-all");
-          const result = await instance.getAllProduct() as Promise<SubCategory>[];
-          const formattedResult = result.flatMap((subCategory: any) => {
-            return subCategory.subCategories.map((product: { id: string; name: string; image: string; }) => ({
-              id: product.id,
-              name: product.name,
-              image: product.image,
-              subCategoryName: subCategory.name,
-            }));
-          });
-          setFetchData(formattedResult);
-          setSourceOfTruth(formattedResult);
-          setLoading(false);
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }, []);
+  const { data: allProductData, isLoading, refetch } = useQuery('subCategories', async () => {
+    const instance = new ApiClient('/sub-category/find-all');
+    const result = await instance.getAllProduct() as Promise<SubCategory>[];
+    const formattedResult = result.flatMap((subCategory: any) => {
+      return subCategory.subCategories.map((product: { id: string; name: string; image: string; }) => ({
+        id: product.id,
+        name: product.name,
+        image: product.image,
+        subCategoryName: subCategory.name,
+      }));
+    });
+    setFetchData(formattedResult);
+    setSourceOfTruth(formattedResult);
+    setLoading(false);
+    return formattedResult;
+  });
 
-    if (loading) {
-      return (
-        <div className="spinner-container">
-          <div className="spinner"></div>
-          <div>مدیر باید صبور باشه...</div>
-        </div>
-      );
-    } else {
-      totalProduct = fetchData.length;
-    }
+  if (isLoading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner"></div>
+        <div>مدیر باید صبور باشه...</div>
+      </div>
+    );
+  } else {
+    totalProduct = allProductData!.length;
+  }
+
 
 
     const handleModalOpen = () => {
