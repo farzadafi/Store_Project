@@ -7,7 +7,7 @@ const MainManagerPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate('/main-manager-page/products')
+    navigate("/main-manager-page/products");
   }, []);
 
   return (
