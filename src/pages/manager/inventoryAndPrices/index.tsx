@@ -6,10 +6,6 @@ import {toast} from "react-toastify";
 import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {useCookies} from "react-cookie";
 
-interface UpdateArray {
-  name: string
-}
-
 const InventoryAndPrices = () => {
   const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
   const [sourceOfTruth, setSourceOfTruth] = useState<FetchInventoryProduct[]>([]);
@@ -19,7 +15,6 @@ const InventoryAndPrices = () => {
   const [newPriceArray, setNewPriceArray] = useState<NewPriceArrayUpdate[]>([]);
   const [isShowCancelButton, setShowCancelButton] = useState(false);
   const [cookies, _setCookie] = useCookies(["token"]);
-  const [saveCompleted, setSaveCompleted] = useState<UpdateArray[]>([]);
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
 
@@ -125,11 +120,6 @@ const InventoryAndPrices = () => {
         try {
           const instance = new ApiClient("/product/update");
           await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
-            setSaveCompleted([
-              ...saveCompleted, {
-                name: 'farzad'
-              }
-            ]);
             console.log(r);
             showSuccessfulToastMessage();
           });
@@ -170,7 +160,7 @@ const InventoryAndPrices = () => {
         console.error(error);
       }
     })();
-  }, saveCompleted);
+  }, []);
 
   if (loading) {
     return (
