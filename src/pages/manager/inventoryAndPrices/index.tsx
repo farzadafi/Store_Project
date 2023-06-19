@@ -44,7 +44,7 @@ const InventoryAndPrices = () => {
   };
 
   const showPoetToastMessage = () => {
-    toast.error("ﺭﻭﺯﯼ ﺑﻪ ﺭﻫﯽ ﻣﺮﺍ ﮔﺬﺭ ﺑﻮﺩ ... ﺧﻮﺍﺑﯿﺪﻩ ﺑﻪ ﺭﻩ، ﺟﻨﺎﺏ ﺧﺮ ﺑﻮﺩ", {
+    toast.error("ﺭﻭﺯﯼ ﺑﻪ اپی ﻣﺮﺍ ﮔﺬﺭ ﺑﻮﺩ ... مدیر سامانه، ﺟﻨﺎﺏ ﺧﺮ ﺑﻮﺩ", {
       position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
