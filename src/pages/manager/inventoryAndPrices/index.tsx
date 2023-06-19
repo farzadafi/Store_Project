@@ -6,6 +6,10 @@ import {toast} from "react-toastify";
 import {IoMdArrowRoundBack, IoMdArrowRoundForward} from "react-icons/io";
 import {useCookies} from "react-cookie";
 
+interface UpdateArray {
+  name: string
+}
+
 const InventoryAndPrices = () => {
   const [fetchData, setFetchData] = useState<FetchInventoryProduct[]>([]);
   const [sourceOfTruth, setSourceOfTruth] = useState<FetchInventoryProduct[]>([]);
@@ -15,7 +19,7 @@ const InventoryAndPrices = () => {
   const [newPriceArray, setNewPriceArray] = useState<NewPriceArrayUpdate[]>([]);
   const [isShowCancelButton, setShowCancelButton] = useState(false);
   const [cookies, _setCookie] = useCookies(["token"]);
-
+  const [saveCompleted, setSaveCompleted] = useState<UpdateArray[]>([]);
 
   const tableHeaderArray = ["دسته بندی", "نام کالا", "قیمت", "موجودی"];
 
@@ -34,6 +38,13 @@ const InventoryAndPrices = () => {
 
   const showErrorToastMessage = () => {
     toast.error("بعضی وقتا نمیشه اون چیزی که باید بشه :|", {
+      position: toast.POSITION.TOP_CENTER,
+      className: "toast-message"
+    });
+  };
+
+  const showPoetToastMessage = () => {
+    toast.error("ﺭﻭﺯﯼ ﺑﻪ ﺭﻫﯽ ﻣﺮﺍ ﮔﺬﺭ ﺑﻮﺩ ... ﺧﻮﺍﺑﯿﺪﻩ ﺑﻪ ﺭﻩ، ﺟﻨﺎﺏ ﺧﺮ ﺑﻮﺩ", {
       position: toast.POSITION.TOP_CENTER,
       className: "toast-message"
     });
@@ -109,17 +120,25 @@ const InventoryAndPrices = () => {
       return acc;
     }, {}));
 
-    (async () => {
-      try {
-        const instance = new ApiClient("/product/update");
-        await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
-          console.log(r);
-          showSuccessfulToastMessage();
-        });
-      } catch (error) {
-        showErrorToastMessage();
-      }
-    })();
+    if(resultArrayAfterCombine.length > 0 ) {
+      (async () => {
+        try {
+          const instance = new ApiClient("/product/update");
+          await instance.updateProducts(cookies.token, resultArrayAfterCombine).then(r => {
+            setSaveCompleted([
+              ...saveCompleted, {
+                name: 'farzad'
+              }
+            ]);
+            console.log(r);
+            showSuccessfulToastMessage();
+          });
+        } catch (error) {
+          showErrorToastMessage();
+        }
+      })();
+    }else
+      showPoetToastMessage()
   };
 
   const cancelEditButton = () => {
@@ -151,7 +170,7 @@ const InventoryAndPrices = () => {
         console.error(error);
       }
     })();
-  }, []);
+  }, saveCompleted);
 
   if (loading) {
     return (
