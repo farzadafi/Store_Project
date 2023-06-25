@@ -1,7 +1,9 @@
 const Footer = () => {
   return (
-    <footer className={"flex justify-between bg-[#8130d1]"}>
-      footer is Here :) </footer>
+    <footer className={"flex bg-[#8130d1] justify-center"}>
+      <p>
+        تمامی حقوق محفوظ است.</p>
+    </footer>
   );
 };
 
