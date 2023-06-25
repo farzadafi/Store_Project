@@ -33,9 +33,10 @@ interface TextareaFieldProps {
 
 interface Props {
   handleClose: () => void;
+  refetch: () => void;
 }
 
-const AddProductModal = ({handleClose}: Props) => {
+const AddProductModal = ({handleClose, refetch}: Props) => {
   const [fetchData, setFetchData] = useState<SubCategoryName[]>([]);
   const [cookies, _setCookie] = useCookies(["token"]);
   const formikRef = useRef<FormikProps<ProductFormValue>>(null);
@@ -120,9 +121,9 @@ const AddProductModal = ({handleClose}: Props) => {
               }
 
               if (!values.description)
-                errors.description = "بنویس چند تا جمله دیگه";
+                errors.description = "به ابلفضل اینجوری هشکی هچی نمیخره";
               else if (/^.{0,20}$/.test(values.description))
-                errors.description = "۲۰ تا کاراکتر بنویس انصافا";
+                errors.description = "شطو شده؟";
 
               return errors;
             }}
@@ -137,6 +138,7 @@ const AddProductModal = ({handleClose}: Props) => {
                         const instance = new ApiClient("/product/add");
                         const resultCall = instance.addProduct(cookies.token, form) as Promise<ResultMessage>;
                         resultCall.then((_result: ResultMessage) => {
+                          refetch();
                           formikRef.current!.resetForm();
                           showSuccessfulToastMessage();
                         }).catch((_error: ResultMessage) => {
