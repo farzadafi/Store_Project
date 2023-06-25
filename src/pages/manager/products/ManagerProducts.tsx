@@ -140,8 +140,6 @@ const ManagerProducts = () => {
     totalProduct = allProductData!.length;
   }
 
-
-
     const handleModalOpen = () => {
       setShowModal(true);
     };
@@ -174,6 +172,7 @@ const ManagerProducts = () => {
         const instance = new ApiClient("/product/delete");
         const result = instance.deleteProduct(cookies.token, productId)
         console.log(result);
+        refetch().then()
         showSuccessfulToastMessage()
       } catch (error) {
         showErrorToastMessage()
@@ -198,7 +197,7 @@ const ManagerProducts = () => {
             <div onClick={handleModalClose} className="fixed inset-0 bg-black opacity-30 z-40"></div>
           )}
           {showModal && (
-            <AddProductModal handleClose={handleModalClose}/>
+            <AddProductModal handleClose={handleModalClose} refetch={refetch}/>
           )}
         </div>
         <div className={"max-w-4xl mt-10 max-sm:w-72 "}>
