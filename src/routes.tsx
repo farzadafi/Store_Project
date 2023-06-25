@@ -1,8 +1,12 @@
 import {createBrowserRouter} from "react-router-dom";
-import {HomePage, InventoryAndPrices, LoginPage, MainManagerPage, Orders} from "@/pages";
+import {HomePage, InventoryAndPrices, LoginPage, MainManagerPage, Orders, Products} from "@/pages";
 import ManagerProducts from "@/pages/manager/products/ManagerProducts";
 
-const router = createBrowserRouter([{path: "/", element: <HomePage/>, children: [{}]},
+const router = createBrowserRouter([{
+  path: "/", element: <HomePage/>, children: [
+    {path: "main-products", element: <Products/>}
+  ]
+},
   {
     path: "/login",
     element: <LoginPage/>
