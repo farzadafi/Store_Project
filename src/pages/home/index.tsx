@@ -15,7 +15,7 @@ const HomePage = () => {
   return (
     <Container>
       <NormalHeader/>
-      <div className={"flex-grow"}>
+      <div className={"overflow-auto h-64 flex-grow"}>
         <Outlet/>
       </div>
       <Footer/>
