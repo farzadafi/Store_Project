@@ -1,14 +1,25 @@
 import {Button} from "@/component";
 import {IoIosCloseCircleOutline} from "react-icons/io";
 
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number,
+  description: string,
+  subCategoryName: string,
+}
+
 interface Props {
   handleClose: () => void;
+  product: Product
 }
 
 const closeIcon = <IoIosCloseCircleOutline className={"w-5 h-5 text-red-500"}/>;
 
 
-const SingleProductModal = ({handleClose}: Props) => {
+const SingleProductModal = ({handleClose, product}: Props) => {
 
   return (
     <div
