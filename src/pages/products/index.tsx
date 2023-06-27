@@ -17,7 +17,15 @@ interface Product {
 const Products = () => {
   const [_loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [staticProduct, setStaticProduct] = useState({});
+  const [staticProduct, setStaticProduct] = useState<Product>({
+    description: "",
+    id: 0,
+    image: "",
+    name: "",
+    price: 0,
+    quantity: 0,
+    subCategoryName: "",
+    });
 
   const handleModalOpen = (product: Product) => {
     setStaticProduct(product);
@@ -72,7 +80,6 @@ const Products = () => {
       };
       result[subCategoryName].push({
         ...limitedProduct,
-        // id: result[subCategoryName].length + 1
       });
     }
     return result;
