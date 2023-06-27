@@ -16,11 +16,12 @@ type buttonProps = {
   onClick?: () => void;
   children?: ReactNode,
   type?: "button" | "submit" | "reset"
+  disabled?: boolean
 }
 
-const Button = ({variant, classes, onClick, children, type}: buttonProps) => {
+const Button = ({variant, classes, onClick, children, type ,disabled}: buttonProps) => {
   return (
-    <button type={type} className={`${variants[variant]} ${classes}`} onClick={() => {
+    <button type={type} disabled={disabled} className={`${variants[variant]} ${classes}`} onClick={() => {
       onClick && onClick();
     }
     }>
