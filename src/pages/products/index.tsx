@@ -98,11 +98,11 @@ const Products = () => {
         </div>
         <div className={"flex gap-4 flex-wrap pt-2 justify-center border m-2 rounded-[3rem] flex-col"}>
           <h1 className={"text-center text-[2rem]"}>{subCategoryName}</h1>
-          <div className={"flex flex-wrap justify-center gap-12 p-4"}>
+          <div className={"flex flex-wrap justify-center gap-8 p-4"}>
             {products.map(product => (
               <div key={product.id} onClick={() => handleModalOpen(product)}
                    className={"w-max flex flex-col hover:cursor-pointer justify-center items-center gap-2 border p-4 rounded-[3rem]"}>
-                <img className="w-36 h-36 rounded-[3rem] max-sm:w-8 max-sm:h-8 flex-shrink-0 mx-auto"
+                <img className="w-24 h-24 rounded-[3rem] max-sm:w-8 max-sm:h-8 flex-shrink-0 mx-auto"
                      src={"data:image/png;base64," + product.image} alt={product.name}/>
                 <div>
                   <p>{product.name}</p>
