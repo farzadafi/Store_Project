@@ -5,11 +5,13 @@ import {useNavigate} from "react-router";
 import {useCookies} from "react-cookie";
 import ApiClient from "@/services/api-client";
 import {ResultMessage} from "@/interfaces";
+import {useSelector} from "react-redux";
 
 
 const NormalHeader = () => {
   const navigate = useNavigate();
   const [cookies] = useCookies(["token"]);
+  const cartArrayLength = useSelector(state => state.cartArray.products.length);
 
 
   const handleManageButton = () => {
@@ -23,7 +25,7 @@ const NormalHeader = () => {
         } catch (error) {
           navigate("/login");
         }
-      }else {
+      } else {
         navigate("/login");
       }
     }
@@ -44,6 +46,9 @@ const NormalHeader = () => {
           <div className={"flex gap-2 items-center"}>
             <SlBasket/>
             <p>سبد خرید</p>
+            <div className={"relative"}>
+              <div className={"absolute bg-red-500 p-1 rounded-3xl"}>{cartArrayLength}</div>
+            </div>
           </div>
         </Button>
       </div>
