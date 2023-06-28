@@ -15,7 +15,7 @@ const NormalHeader = () => {
 
 
   const handleManageButton = () => {
-    async function verifyToken() {
+    (async () => {
       if (cookies.token) {
         try {
           const instance = new ApiClient("/api/login/verify-token");
@@ -28,9 +28,7 @@ const NormalHeader = () => {
       } else {
         navigate("/login");
       }
-    }
-
-    verifyToken();
+    })();
   };
 
 
