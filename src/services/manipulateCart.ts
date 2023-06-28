@@ -22,7 +22,7 @@ export const counterSlice = createSlice({
     increase: {
       reducer: (state, action: PayloadAction<Product>) => {
         const foundProduct = state.products.find(product => product.id === action.payload.id);
-        if(foundProduct === undefined) {
+        if (foundProduct === undefined) {
           console.log("here");
           state.products.push({
             id: action.payload.id,
@@ -30,15 +30,17 @@ export const counterSlice = createSlice({
             price: action.payload.price,
             number: 1
           });
-        }else{
+        } else {
           const foundProductIndex = state.products.findIndex(product => product.id === action.payload.id);
           state.products[foundProductIndex].number += 1;
           console.log(JSON.stringify(state.products));
         }
       },
+      prepare: (product: Product) => {
+        return { payload: product };
+      }
     },
-    decrease: (state, action) => {
-    }
+    decrease: (_state, _action) => {}
   }
 });
 export const {increase, decrease} = counterSlice.actions;
