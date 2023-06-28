@@ -2,6 +2,8 @@ import {Button, Input} from "@/component";
 import {IoIosCloseCircleOutline} from "react-icons/io";
 import {useState} from "react";
 import {toast} from "react-toastify";
+import {useDispatch} from "react-redux";
+import {increase} from "@/services/manipulateCart";
 
 interface Product {
   id: number;
@@ -23,6 +25,8 @@ const closeIcon = <IoIosCloseCircleOutline className={"w-5 h-5 text-red-500"}/>;
 
 const SingleProductModal = ({handleClose, product}: Props) => {
   const [isCorrect, setCorrect] = useState(false);
+  const dispatch = useDispatch()
+
 
   const showWarningToastMessage = () => {
     toast.warning("گونی آوردی میخوای " + product.quantity + " تا گوشی ببری؟؟", {
@@ -65,7 +69,7 @@ const SingleProductModal = ({handleClose, product}: Props) => {
                   <p>{product.price}</p>
                   <Input onChange={checkQuantity} placeHolder={""} icon={""} type={"number"} name={"number"}
                          classes={`w-[5rem]`}/>
-                  <Button variant={"managerButton"} disabled={isCorrect}
+                  <Button variant={"managerButton"} onClick={() => dispatch(increase({ id: product.id, name: product.name, price: product.price }))} disabled={isCorrect}
                           classes={`${isCorrect ? "bg-gray-500 cursor-not-allowed" : ""}`}>افزودن</Button>
                 </div>
               </div>
