@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {increase} from "@/services/manipulateCart";
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -25,7 +25,8 @@ const closeIcon = <IoIosCloseCircleOutline className={"w-5 h-5 text-red-500"}/>;
 
 const SingleProductModal = ({handleClose, product}: Props) => {
   const [isCorrect, setCorrect] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [numberProduct, setNumberProduct] = useState(1);
 
 
   const showWarningToastMessage = () => {
@@ -37,11 +38,12 @@ const SingleProductModal = ({handleClose, product}: Props) => {
 
   const checkQuantity = (e: { target: { valueAsNumber: any; }; }) => {
     if (e.target.valueAsNumber > product.quantity) {
-      showWarningToastMessage()
+      showWarningToastMessage();
       setCorrect(true);
-    }
-    else
+    } else {
       setCorrect(false);
+      setNumberProduct(e.target.valueAsNumber);
+    }
   };
 
   return (
@@ -69,7 +71,13 @@ const SingleProductModal = ({handleClose, product}: Props) => {
                   <p>{product.price}</p>
                   <Input onChange={checkQuantity} placeHolder={""} icon={""} type={"number"} name={"number"}
                          classes={`w-[5rem]`}/>
-                  <Button variant={"managerButton"} onClick={() => dispatch(increase({ id: product.id, name: product.name, price: product.price }))} disabled={isCorrect}
+                  <Button variant={"managerButton"} onClick={() => dispatch(increase({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    number: numberProduct,
+                    quantity: product.quantity
+                  }))} disabled={isCorrect}
                           classes={`${isCorrect ? "bg-gray-500 cursor-not-allowed" : ""}`}>افزودن</Button>
                 </div>
               </div>
