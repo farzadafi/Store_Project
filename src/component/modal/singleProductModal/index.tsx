@@ -39,7 +39,7 @@ const SingleProductModal = ({handleClose, product}: Props) => {
   const showErrorToastMessage = () => {
     toast.warning("آدم باش :)",{
       position: toast.POSITION.TOP_CENTER,
-      className: "toast-message-cow"
+      className: "toast-message"
     });
   };
 
