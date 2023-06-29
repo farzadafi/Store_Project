@@ -1,17 +1,20 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {toast} from "react-toastify";
 
 interface Product {
   id: string,
   name: string,
-  price: string
+  price: number,
+  number: number,
+  quantity?: number
 }
 
-interface Product {
-  id: string;
-  name: string;
-  price: string;
-  number: number;
-}
+const showWarningToastMessage = () => {
+  toast.warning("عجب خریه این بازیکن",{
+    position: toast.POSITION.TOP_CENTER,
+    className: "toast-message"
+  });
+};
 
 export const counterSlice = createSlice({
   name: "cartArray",
@@ -23,16 +26,22 @@ export const counterSlice = createSlice({
       reducer: (state, action: PayloadAction<Product>) => {
         const foundProduct = state.products.find(product => product.id === action.payload.id);
         if (foundProduct === undefined) {
-          console.log("here");
-          state.products.push({
-            id: action.payload.id,
-            name: action.payload.name,
-            price: action.payload.price,
-            number: 1
-          });
+          if(action.payload.quantity! >= action.payload.number) {
+            state.products.push({
+              id: action.payload.id,
+              name: action.payload.name,
+              price: action.payload.price,
+              number: action.payload.number
+            });
+          }else{
+            showWarningToastMessage();
+          }
         } else {
           const foundProductIndex = state.products.findIndex(product => product.id === action.payload.id);
-          state.products[foundProductIndex].number += 1;
+          if(state.products[foundProductIndex].number + action.payload.number > action.payload.quantity!)
+            showWarningToastMessage()
+          else
+            state.products[foundProductIndex].number += action.payload.number;
           console.log(JSON.stringify(state.products));
         }
       },
